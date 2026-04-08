@@ -5,18 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>SHURA. Staff App</title>
   <link rel="manifest" href="manifest.json" />
-  <meta name="theme-color" content="#B85C7A" />
+  <meta name="theme-color" content="#5C8A6B" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="apple-mobile-web-app-title" content="SHURA" />
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
     :root {
-      --pink: #B85C7A;
-      --pink-light: #FBEAF0;
-      --pink-mid: #ED93B1;
-      --pink-dark: #72243E;
-      --pink-deep: #993556;
+      --sage: #6B9E7A;
+      --sage-light: #EAF4EE;
+      --sage-mid: #9ECFB0;
+      --sage-dark: #1a2e22;
+      --sage-deep: #2d5c3f;
       --bg: #ffffff;
       --bg2: #f7f7f5;
       --bg3: #f0ede8;
@@ -63,9 +63,9 @@
     }
     .topbar-row { display: flex; align-items: center; justify-content: space-between; }
     .brand { font-size: 22px; font-weight: 600; letter-spacing: 4px; color: var(--text); }
-    .brand span { color: var(--pink); }
+    .brand span { color: #3d6b52; }
     .jenny-badge {
-      font-size: 11px; background: #F4C0D1; color: var(--pink-dark);
+      font-size: 11px; background: #B8DDCA; color: var(--sage-dark);
       padding: 4px 11px; border-radius: 20px; font-weight: 600; cursor: pointer;
       border: none; transition: opacity .15s;
     }
@@ -76,14 +76,14 @@
       border: 0.5px solid var(--border); background: var(--bg2);
       color: var(--text2); cursor: pointer; transition: all .15s;
     }
-    .lang-btn.active { background: var(--pink); color: #fff; border-color: var(--pink); }
+    .lang-btn.active { background: var(--sage); color: #fff; border-color: var(--sage); }
     .loc-bar { display: flex; gap: 4px; margin-top: 6px; flex-wrap: wrap; }
     .loc-btn {
       font-size: 11px; padding: 4px 9px; border-radius: 20px;
       border: 0.5px solid var(--border); background: var(--bg2);
       color: var(--text2); cursor: pointer; transition: all .15s;
     }
-    .loc-btn.active { background: var(--pink-light); color: var(--pink-dark); border-color: var(--pink-mid); }
+    .loc-btn.active { background: var(--sage-light); color: var(--sage-dark); border-color: var(--sage-mid); }
     /* ── BOTTOM NAV ── */
     .bnav {
       display: flex; border-top: 0.5px solid var(--border);
@@ -91,10 +91,10 @@
       padding-bottom: env(safe-area-inset-bottom, 0px);
     }
     .bn { flex: 1; padding: 9px 2px 7px; text-align: center; cursor: pointer; border-top: 2px solid transparent; transition: all .15s; background: none; border-left: none; border-right: none; border-bottom: none; }
-    .bn.active { border-top-color: var(--pink); }
+    .bn.active { border-top-color: var(--sage); }
     .bn-ico { font-size: 16px; line-height: 1; display: block; }
     .bn-lbl { font-size: 9px; color: var(--text3); margin-top: 2px; display: block; }
-    .bn.active .bn-lbl { color: var(--pink); font-weight: 600; }
+    .bn.active .bn-lbl { color: var(--sage); font-weight: 600; }
     /* ── CONTENT ── */
     .content { flex: 1; overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; }
     .page { display: none; }
@@ -105,11 +105,11 @@
     .card { background: var(--bg2); border-radius: var(--radius); padding: 12px 14px; margin-bottom: 8px; }
     .bcard { border: 0.5px solid var(--border); border-radius: var(--radius); padding: 12px 14px; margin-bottom: 8px; cursor: pointer; transition: background .15s; }
     .bcard:hover, .bcard:active { background: var(--bg2); }
-    .bcard.pinned { border-color: var(--pink-mid); background: var(--pink-light); }
+    .bcard.pinned { border-color: var(--sage-mid); background: var(--sage-light); }
     /* ── PILLS ── */
     .pill { font-size: 10px; padding: 2px 7px; border-radius: 20px; white-space: nowrap; display: inline-block; font-weight: 500; }
     .p-must { background: #FCEBEB; color: #A32D2D; }
-    .p-pin { background: var(--pink-light); color: var(--pink-deep); }
+    .p-pin { background: var(--sage-light); color: var(--sage-deep); }
     .p-new { background: #EAF3DE; color: #3B6D11; }
     .p-task { background: #E6F1FB; color: #185FA5; }
     .p-warn { background: #FAEEDA; color: #854F0B; }
@@ -117,9 +117,10 @@
     .p-off { background: #F1EFE8; color: #5F5E5A; }
     .p-low { background: #FCEBEB; color: #A32D2D; }
     .p-ok { background: #EAF3DE; color: #3B6D11; }
+    .p-bday { background: #FFF0E6; color: #B85000; }
     /* ── AVATARS ── */
     .av { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; flex-shrink: 0; }
-    .av-pk { background: #FBEAF0; color: #993556; }
+    .av-pk { background: #EFF5F1; color: #2d5c3f; }
     .av-tl { background: #E1F5EE; color: #0F6E56; }
     .av-pu { background: #EEEDFE; color: #3C3489; }
     .av-am { background: #FAEEDA; color: #854F0B; }
@@ -147,32 +148,32 @@
     .dp { flex: 1; text-align: center; padding: 7px 2px; border-radius: var(--radius-sm); cursor: pointer; transition: background .15s; }
     .dp .dl { font-size: 9px; color: var(--text3); }
     .dp .dn { font-size: 13px; font-weight: 600; color: var(--text); margin-top: 2px; }
-    .dp.active { background: var(--pink); }
+    .dp.active { background: var(--sage); }
     .dp.active .dl, .dp.active .dn { color: #fff; }
-    .dp.hs::after { content: ''; display: block; width: 4px; height: 4px; border-radius: 50%; background: var(--pink-mid); margin: 2px auto 0; }
+    .dp.hs::after { content: ''; display: block; width: 4px; height: 4px; border-radius: 50%; background: var(--sage-mid); margin: 2px auto 0; }
     .dp.active.hs::after { background: rgba(255,255,255,.5); }
     /* ── SUB TABS ── */
     .stabs { display: flex; border-bottom: 0.5px solid var(--border); background: var(--bg); position: sticky; top: 0; z-index: 5; }
     .stab { flex: 1; padding: 10px 4px; text-align: center; font-size: 12px; color: var(--text3); cursor: pointer; border-bottom: 2px solid transparent; transition: all .15s; background: none; border-top: none; border-left: none; border-right: none; }
-    .stab.active { color: var(--pink); border-bottom-color: var(--pink); font-weight: 600; }
+    .stab.active { color: var(--sage); border-bottom-color: var(--sage); font-weight: 600; }
     /* ── FILTER ROW ── */
     .frow { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 10px; }
     .fb { font-size: 11px; padding: 4px 10px; border-radius: 20px; border: 0.5px solid var(--border); background: var(--bg2); color: var(--text2); cursor: pointer; transition: all .15s; }
-    .fb.active { background: var(--pink-light); color: var(--pink-deep); border-color: var(--pink-mid); }
+    .fb.active { background: var(--sage-light); color: var(--sage-deep); border-color: var(--sage-mid); }
     /* ── NOTICE ── */
     .ntop { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
     .ntitle { font-size: 13px; font-weight: 600; color: var(--text); line-height: 1.4; }
-    .bcard.pinned .ntitle { color: var(--pink-dark); }
+    .bcard.pinned .ntitle { color: var(--sage-dark); }
     .nmeta { font-size: 10px; color: var(--text3); margin-top: 4px; }
     .nprev { font-size: 12px; color: var(--text2); margin-top: 4px; line-height: 1.5; }
-    .udot { width: 6px; height: 6px; border-radius: 50%; background: var(--pink); flex-shrink: 0; margin-top: 4px; }
+    .udot { width: 6px; height: 6px; border-radius: 50%; background: var(--sage); flex-shrink: 0; margin-top: 4px; }
     /* ── MANUAL ── */
     .mcat { margin-bottom: 5px; }
     .mhdr { display: flex; align-items: center; justify-content: space-between; padding: 11px 13px; background: var(--bg2); border-radius: var(--radius-sm); cursor: pointer; border: none; width: 100%; text-align: left; transition: background .15s; }
     .mhdr:hover { background: var(--bg3); }
     .mleft { display: flex; align-items: center; gap: 9px; }
     .mico { width: 28px; height: 28px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-size: 13px; }
-    .ci-pk { background: #FBEAF0; } .ci-tl { background: #E1F5EE; } .ci-pu { background: #EEEDFE; } .ci-am { background: #FAEEDA; } .ci-bl { background: #E6F1FB; }
+    .ci-pk { background: #EFF5F1; } .ci-tl { background: #E1F5EE; } .ci-pu { background: #EEEDFE; } .ci-am { background: #FAEEDA; } .ci-bl { background: #E6F1FB; }
     .mar { font-size: 10px; color: var(--text3); transition: transform .2s; }
     .mar.open { transform: rotate(90deg); }
     .mitems { display: none; padding: 3px 0 5px 10px; }
@@ -189,11 +190,11 @@
     .mstars { display: flex; gap: 2px; }
     .ms { font-size: 13px; color: #E9A82E; }
     .ms.e { color: var(--border2); }
-    .scirc { width: 42px; height: 42px; border-radius: 50%; background: var(--pink-light); display: flex; align-items: center; justify-content: center; flex-direction: column; flex-shrink: 0; }
-    .snum { font-size: 13px; font-weight: 600; color: var(--pink); line-height: 1; }
-    .smax { font-size: 9px; color: var(--pink-mid); }
+    .scirc { width: 42px; height: 42px; border-radius: 50%; background: var(--sage-light); display: flex; align-items: center; justify-content: center; flex-direction: column; flex-shrink: 0; }
+    .snum { font-size: 13px; font-weight: 600; color: var(--sage-deep); line-height: 1; }
+    .smax { font-size: 9px; color: var(--sage-mid); }
     .pbwrap { background: var(--bg2); border-radius: 20px; height: 6px; flex: 1; overflow: hidden; }
-    .pbfill { height: 100%; border-radius: 20px; background: var(--pink); transition: width .4s; }
+    .pbfill { height: 100%; border-radius: 20px; background: var(--sage); transition: width .4s; }
     .lrow { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 0.5px solid var(--border); }
     .lrow:last-child { border-bottom: none; }
     .rk { font-size: 14px; font-weight: 600; width: 18px; text-align: center; color: var(--text3); }
@@ -225,7 +226,7 @@
     .qty-btn:hover { background: var(--bg2); }
     .qty-num { font-size: 14px; font-weight: 600; color: var(--text); min-width: 24px; text-align: center; }
     .qty-unit { font-size: 11px; color: var(--text3); }
-    .reorder-btn { font-size: 11px; padding: 5px 11px; border-radius: 20px; border: none; background: var(--pink-light); color: var(--pink-deep); cursor: pointer; font-weight: 500; transition: opacity .15s; }
+    .reorder-btn { font-size: 11px; padding: 5px 11px; border-radius: 20px; border: none; background: var(--sage-light); color: var(--sage-deep); cursor: pointer; font-weight: 500; transition: opacity .15s; }
     .reorder-btn:hover { opacity: .8; }
     .inv-pb { background: var(--bg2); border-radius: 20px; height: 5px; overflow: hidden; margin-top: 8px; }
     .inv-pb-fill { height: 100%; border-radius: 20px; transition: width .3s; }
@@ -239,18 +240,18 @@
     .inv-bar-wrap { flex: 1; background: var(--bg2); border-radius: 20px; height: 6px; overflow: hidden; margin: 0 8px; }
     .inv-bar-fill { height: 100%; border-radius: 20px; }
     /* ── CLIENTS ── */
-    .rvcard { border-left: 3px solid var(--pink); background: var(--pink-light); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 10px 12px; margin-bottom: 7px; }
+    .rvcard { border-left: 3px solid var(--sage-deep); background: var(--sage-light); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 10px 12px; margin-bottom: 7px; }
     .rvcard.neutral { border-left-color: var(--border2); background: var(--bg2); }
     .rvtop { display: flex; align-items: center; justify-content: space-between; }
-    .rvnm { font-size: 12px; font-weight: 600; color: var(--pink-dark); }
+    .rvnm { font-size: 12px; font-weight: 600; color: var(--sage-dark); }
     .rvcard.neutral .rvnm { color: var(--text); }
-    .rvtime { font-size: 10px; color: var(--pink-mid); }
+    .rvtime { font-size: 10px; color: var(--sage-mid); }
     .rvcard.neutral .rvtime { color: var(--text3); }
-    .rvtxt { font-size: 12px; color: var(--pink-deep); margin-top: 4px; line-height: 1.5; font-style: italic; }
+    .rvtxt { font-size: 12px; color: var(--sage-deep); margin-top: 4px; line-height: 1.5; font-style: italic; }
     .rvcard.neutral .rvtxt { color: var(--text2); }
-    .rvmeta { font-size: 10px; color: var(--pink-mid); margin-top: 3px; }
+    .rvmeta { font-size: 10px; color: var(--sage-mid); margin-top: 3px; }
     .rvcard.neutral .rvmeta { color: var(--text3); }
-    .notif-banner { background: var(--pink-light); border: 0.5px solid var(--pink-mid); border-radius: var(--radius); padding: 11px 13px; margin-bottom: 10px; display: flex; align-items: flex-start; gap: 10px; }
+    .notif-banner { background: var(--sage-light); border: 0.5px solid var(--sage-mid); border-radius: var(--radius); padding: 11px 13px; margin-bottom: 10px; display: flex; align-items: flex-start; gap: 10px; }
     .twocol { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; margin-bottom: 12px; }
     .mstat { background: var(--bg2); border-radius: var(--radius-sm); padding: 11px; }
     .mval { font-size: 18px; font-weight: 600; color: var(--text); }
@@ -272,8 +273,8 @@
     .wage-row:last-child { border-bottom: none; }
     .total-row { display: flex; justify-content: space-between; padding: 12px 0 0; }
     .tlbl { font-size: 13px; font-weight: 600; color: var(--text); }
-    .tamt { font-size: 17px; font-weight: 600; color: var(--pink); }
-    .owner-banner { background: var(--pink-light); border: 0.5px solid var(--pink-mid); border-radius: var(--radius); padding: 9px 13px; margin-bottom: 12px; display: flex; align-items: center; gap: 7px; font-size: 12px; color: var(--pink-dark); }
+    .tamt { font-size: 17px; font-weight: 600; color: var(--sage-deep); }
+    .owner-banner { background: var(--sage-light); border: 0.5px solid var(--sage-mid); border-radius: var(--radius); padding: 9px 13px; margin-bottom: 12px; display: flex; align-items: center; gap: 7px; font-size: 12px; color: var(--sage-dark); }
     .req-card { border: 0.5px solid var(--border); border-radius: var(--radius); padding: 12px 14px; margin-bottom: 7px; }
     .btn-row { display: flex; gap: 6px; margin-top: 8px; }
     .btn-ok { font-size: 12px; padding: 6px 12px; border-radius: var(--radius-sm); border: none; background: #EAF3DE; color: #3B6D11; cursor: pointer; font-weight: 500; }
@@ -288,7 +289,7 @@
     .overlay { display: none; position: absolute; inset: 0; background: var(--bg); border-radius: inherit; overflow-y: auto; z-index: 50; -webkit-overflow-scrolling: touch; }
     .overlay.open { display: block; }
     .ov-hdr { padding: 12px 16px; border-bottom: 0.5px solid var(--border); display: flex; align-items: center; gap: 11px; position: sticky; top: 0; background: var(--bg); z-index: 1; }
-    .back { font-size: 13px; color: var(--pink); cursor: pointer; white-space: nowrap; background: none; border: none; font-family: inherit; padding: 0; }
+    .back { font-size: 13px; color: var(--sage); cursor: pointer; white-space: nowrap; background: none; border: none; font-family: inherit; padding: 0; }
     .ov-t { font-size: 14px; font-weight: 600; color: var(--text); flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .ov-body { padding: 16px; }
     .ov-meta { font-size: 11px; color: var(--text3); margin-bottom: 12px; }
@@ -296,23 +297,84 @@
     .ov-content h3 { font-size: 13px; font-weight: 600; margin: 12px 0 6px; }
     .ov-content ul { padding-left: 14px; }
     .ov-content li { margin-bottom: 5px; }
-    .cfbar { margin-top: 16px; padding: 11px 13px; background: var(--pink-light); border-radius: var(--radius); display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-    .cftext { font-size: 12px; color: var(--pink-dark); }
-    .cfbtn { font-size: 12px; padding: 7px 14px; background: var(--pink); color: #fff; border: none; border-radius: var(--radius-sm); cursor: pointer; font-weight: 500; transition: opacity .15s; }
+    .cfbar { margin-top: 16px; padding: 11px 13px; background: var(--sage-light); border-radius: var(--radius); display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    .cftext { font-size: 12px; color: var(--sage-dark); }
+    .cfbtn { font-size: 12px; padding: 7px 14px; background: var(--sage); color: #fff; border: none; border-radius: var(--radius-sm); cursor: pointer; font-weight: 500; transition: opacity .15s; }
     .cfbtn:hover { opacity: .85; }
     /* ── FORM ELEMENTS ── */
     .form-field { margin-bottom: 13px; }
     .form-lbl { font-size: 11px; color: var(--text3); margin-bottom: 5px; font-weight: 500; display: block; }
     .form-input { width: 100%; padding: 9px 12px; border-radius: var(--radius-sm); border: 0.5px solid var(--border2); background: var(--bg); color: var(--text); font-size: 13px; font-family: inherit; transition: border-color .15s; }
-    .form-input:focus { outline: none; border-color: var(--pink); }
+    .form-input:focus { outline: none; border-color: var(--sage); }
     .form-textarea { width: 100%; padding: 9px 12px; border-radius: var(--radius-sm); border: 0.5px solid var(--border2); background: var(--bg); color: var(--text); font-size: 13px; font-family: inherit; resize: vertical; min-height: 80px; transition: border-color .15s; }
-    .form-textarea:focus { outline: none; border-color: var(--pink); }
-    .save-btn { width: 100%; padding: 12px; border-radius: var(--radius); border: none; background: var(--pink); color: #fff; font-size: 13px; font-weight: 600; cursor: pointer; margin-top: 4px; transition: opacity .15s; }
+    .form-textarea:focus { outline: none; border-color: var(--sage); }
+    .save-btn { width: 100%; padding: 12px; border-radius: var(--radius); border: none; background: var(--sage); color: #fff; font-size: 13px; font-weight: 600; cursor: pointer; margin-top: 4px; transition: opacity .15s; }
     .save-btn:hover { opacity: .9; }
     /* ── TOAST ── */
     .toast { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%) translateY(20px); background: #1a1a1a; color: #fff; font-size: 12px; padding: 9px 18px; border-radius: 20px; opacity: 0; transition: all .3s; pointer-events: none; z-index: 100; white-space: nowrap; }
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-  </style>
+  
+    /* BIRTHDAY & EVENTS */
+    .bday-card{border:0.5px solid var(--border);border-radius:var(--radius);padding:13px 15px;margin-bottom:8px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:background .15s;}
+    .bday-card:hover{background:var(--bg2);}
+    .bday-card.today{background:#FFF8E6;border-color:#F9C84A;}
+    .bday-card.soon{background:var(--sage-light);border-color:var(--sage-mid);}
+    .bday-name{font-size:13px;font-weight:600;color:var(--text);}
+    .bday-date{font-size:11px;color:var(--text2);margin-top:2px;}
+    .bday-countdown{font-size:11px;font-weight:600;margin-top:3px;}
+    .bday-card.today .bday-countdown{color:#B85000;}
+    .bday-card.soon .bday-countdown{color:var(--sage-deep);}
+    .event-card{border:0.5px solid var(--border);border-radius:var(--radius);padding:12px 14px;margin-bottom:8px;display:flex;align-items:flex-start;gap:11px;cursor:pointer;transition:background .15s;}
+    .event-card:hover{background:var(--bg2);}
+    .event-date-box{background:var(--sage);border-radius:var(--radius-sm);padding:6px 10px;text-align:center;flex-shrink:0;min-width:44px;}
+    .event-day{font-size:18px;font-weight:700;color:#fff;line-height:1;}
+    .event-month{font-size:9px;color:rgba(255,255,255,0.8);margin-top:2px;text-transform:uppercase;}
+    .event-title{font-size:13px;font-weight:600;color:var(--text);}
+    .event-desc{font-size:11px;color:var(--text2);margin-top:3px;line-height:1.4;}
+    .event-loc{font-size:10px;color:var(--text3);margin-top:4px;}
+    /* TIME TRACKING */
+    .clock-card{background:var(--sage-dark);border-radius:var(--radius);padding:20px;margin-bottom:12px;text-align:center;}
+    .clock-time{font-size:42px;font-weight:600;color:#fff;letter-spacing:2px;font-variant-numeric:tabular-nums;}
+    .clock-date{font-size:12px;color:rgba(255,255,255,0.6);margin-top:4px;}
+    .clock-status{font-size:12px;font-weight:600;margin-top:10px;padding:5px 14px;border-radius:20px;display:inline-block;}
+    .clock-status.clocked-in{background:#6B9E7A;color:#fff;}
+    .clock-status.clocked-out{background:rgba(255,255,255,0.15);color:rgba(255,255,255,0.7);}
+    .clock-btn{margin-top:14px;padding:12px 32px;border-radius:var(--radius);border:none;font-size:14px;font-weight:600;cursor:pointer;transition:all .15s;}
+    .clock-btn.in{background:#fff;color:var(--sage-dark);}
+    .clock-btn.out{background:rgba(255,255,255,0.15);color:#fff;border:1px solid rgba(255,255,255,0.3);}
+    .weekly-summary{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
+    .ws-box{background:var(--bg2);border-radius:var(--radius-sm);padding:12px;}
+    .ws-val{font-size:22px;font-weight:600;color:var(--text);}
+    .ws-lbl{font-size:10px;color:var(--text3);margin-top:2px;}
+    .time-log{border:0.5px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:10px;}
+    .time-log-hdr{background:var(--bg2);padding:10px 14px;display:flex;justify-content:space-between;align-items:center;}
+    .time-log-row{display:flex;align-items:center;padding:10px 14px;border-top:0.5px solid var(--border);gap:10px;}
+    .time-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+    .dot-in{background:var(--sage);}
+    .time-log-date{font-size:12px;color:var(--text);font-weight:600;flex:1;}
+    .time-log-hrs{font-size:11px;color:var(--text2);}
+    .time-log-total{font-size:12px;font-weight:600;color:var(--sage-deep);}
+    /* WAGE CALCULATOR */
+    .staff-wage-row{border:0.5px solid var(--border);border-radius:var(--radius);padding:13px 14px;margin-bottom:8px;}
+    .staff-wage-hdr{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+    .wage-fields{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+    .wage-field{background:var(--bg2);border-radius:var(--radius-sm);padding:10px 12px;}
+    .wage-field-lbl{font-size:10px;color:var(--text3);margin-bottom:4px;}
+    .wage-field input{width:100%;background:none;border:none;font-size:16px;font-weight:600;color:var(--text);font-family:inherit;padding:0;}
+    .wage-field input:focus{outline:none;}
+    .wage-summary-card{background:var(--sage-dark);border-radius:var(--radius);padding:16px;margin-top:8px;}
+    .wage-summary-title{font-size:12px;font-weight:600;color:rgba(255,255,255,0.7);margin-bottom:12px;}
+    .wage-s-row{display:flex;justify-content:space-between;padding:4px 0;}
+    .wage-s-lbl{font-size:12px;color:rgba(255,255,255,0.6);}
+    .wage-s-val{font-size:13px;font-weight:600;color:#fff;}
+    .wage-divider{height:0.5px;background:rgba(255,255,255,0.2);margin:10px 0;}
+    .wage-total-row{display:flex;justify-content:space-between;align-items:center;}
+    .wage-total-lbl{font-size:13px;color:rgba(255,255,255,0.8);}
+    .wage-total-val{font-size:24px;font-weight:700;color:#fff;}
+    .stabs{display:flex;border-bottom:0.5px solid var(--border);background:var(--bg);}
+    .stab{flex:1;padding:10px 4px;text-align:center;font-size:12px;color:var(--text3);cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;background:none;border-top:none;border-left:none;border-right:none;}
+    .stab.active{color:var(--sage);border-bottom-color:var(--sage);font-weight:600;}
+</style>
 </head>
 <body>
 <div class="app-shell" id="app">
@@ -441,9 +503,9 @@
       </div>
       <div id="values-tab" class="sec" style="display:none;">
         <div class="sec-title" data-k="shuraWay">The SHURA way</div>
-        <div style="background:var(--pink-light);border-radius:var(--radius);padding:13px;margin-bottom:13px;">
-          <div style="font-size:13px;font-weight:600;color:var(--pink-dark);margin-bottom:5px;" data-k="valuesTagline">"Every client leaves feeling seen, cared for, and wanting to return."</div>
-          <div style="font-size:12px;color:var(--pink-deep);line-height:1.6;" data-k="valuesDesc">Like Starbucks knows every regular's order, every SHURA beautician remembers each client's preferences, skin type, and last visit.</div>
+        <div style="background:var(--sage-light);border-radius:var(--radius);padding:13px;margin-bottom:13px;">
+          <div style="font-size:13px;font-weight:600;color:var(--sage-dark);margin-bottom:5px;" data-k="valuesTagline">"Every client leaves feeling seen, cared for, and wanting to return."</div>
+          <div style="font-size:12px;color:var(--sage-deep);line-height:1.6;" data-k="valuesDesc">Like Starbucks knows every regular's order, every SHURA beautician remembers each client's preferences, skin type, and last visit.</div>
         </div>
         <div class="vgrid">
           <div class="vcard"><div style="font-size:19px;margin-bottom:5px;">👀</div><div style="font-size:12px;font-weight:600;color:var(--text);" data-k="v1title">See Every Client</div><div style="font-size:11px;color:var(--text2);margin-top:3px;line-height:1.4;" data-k="v1desc">Greet by name. Remember their history.</div></div>
@@ -464,17 +526,17 @@
       <div id="leader-tab" class="sec" style="display:none;">
         <div class="sec-title" data-k="thisMonth">This month — April 2025</div>
         <div class="card" style="padding:13px 14px;">
-          <div class="lrow"><div class="rk gold">1</div><div class="av av-pk" style="width:30px;height:30px;font-size:10px;">HL</div><div class="f1"><div class="nm">Hai Linh Tran</div><div class="hint" data-k="beautician">Beautician</div></div><div style="text-align:right;"><div style="font-size:14px;font-weight:600;color:var(--pink);">4.8</div><div class="hint">★★★★★</div></div></div>
-          <div class="lrow"><div class="rk silver">2</div><div class="av av-tl" style="width:30px;height:30px;font-size:10px;">XW</div><div class="f1"><div class="nm">Xiao Wei</div><div class="hint" data-k="beautician">Beautician</div></div><div style="text-align:right;"><div style="font-size:14px;font-weight:600;color:var(--pink);">4.6</div><div class="hint">★★★★★</div></div></div>
-          <div class="lrow"><div class="rk bronze">3</div><div class="av av-pu" style="width:30px;height:30px;font-size:10px;">MK</div><div class="f1"><div class="nm">Min Jung Ko</div><div class="hint" data-k="beautician">Beautician</div></div><div style="text-align:right;"><div style="font-size:14px;font-weight:600;color:var(--pink);">4.4</div><div class="hint">★★★★☆</div></div></div>
+          <div class="lrow"><div class="rk gold">1</div><div class="av av-pk" style="width:30px;height:30px;font-size:10px;">HL</div><div class="f1"><div class="nm">Hai Linh Tran</div><div class="hint" data-k="beautician">Beautician</div></div><div style="text-align:right;"><div style="font-size:14px;font-weight:600;color:var(--sage);">4.8</div><div class="hint">★★★★★</div></div></div>
+          <div class="lrow"><div class="rk silver">2</div><div class="av av-tl" style="width:30px;height:30px;font-size:10px;">XW</div><div class="f1"><div class="nm">Xiao Wei</div><div class="hint" data-k="beautician">Beautician</div></div><div style="text-align:right;"><div style="font-size:14px;font-weight:600;color:var(--sage);">4.6</div><div class="hint">★★★★★</div></div></div>
+          <div class="lrow"><div class="rk bronze">3</div><div class="av av-pu" style="width:30px;height:30px;font-size:10px;">MK</div><div class="f1"><div class="nm">Min Jung Ko</div><div class="hint" data-k="beautician">Beautician</div></div><div style="text-align:right;"><div style="font-size:14px;font-weight:600;color:var(--sage);">4.4</div><div class="hint">★★★★☆</div></div></div>
           <div class="lrow"><div class="rk">4</div><div class="av av-am" style="width:30px;height:30px;font-size:10px;">SY</div><div class="f1"><div class="nm">Su Ying Chen</div><div class="hint" data-k="beautician">Beautician</div></div><div style="text-align:right;"><div style="font-size:14px;font-weight:600;color:var(--text2);">4.1</div><div class="hint">★★★★☆</div></div></div>
         </div>
         <div class="sec-title" style="margin-top:4px;" data-k="progress">Monthly Progress</div>
         <div class="card">
-          <div style="margin-bottom:9px;"><div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span style="font-size:12px;color:var(--text);">Hai Linh Tran</span><span style="font-size:12px;color:var(--pink);">96%</span></div><div class="pbwrap"><div class="pbfill" style="width:96%"></div></div></div>
-          <div style="margin-bottom:9px;"><div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span style="font-size:12px;color:var(--text);">Xiao Wei</span><span style="font-size:12px;color:var(--pink);">92%</span></div><div class="pbwrap"><div class="pbfill" style="width:92%"></div></div></div>
-          <div style="margin-bottom:9px;"><div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span style="font-size:12px;color:var(--text);">Min Jung Ko</span><span style="font-size:12px;color:var(--pink);">88%</span></div><div class="pbwrap"><div class="pbfill" style="width:88%"></div></div></div>
-          <div><div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span style="font-size:12px;color:var(--text);">Su Ying Chen</span><span style="font-size:12px;color:var(--pink);">82%</span></div><div class="pbwrap"><div class="pbfill" style="width:82%"></div></div></div>
+          <div style="margin-bottom:9px;"><div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span style="font-size:12px;color:var(--text);">Hai Linh Tran</span><span style="font-size:12px;color:var(--sage);">96%</span></div><div class="pbwrap"><div class="pbfill" style="width:96%"></div></div></div>
+          <div style="margin-bottom:9px;"><div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span style="font-size:12px;color:var(--text);">Xiao Wei</span><span style="font-size:12px;color:var(--sage);">92%</span></div><div class="pbwrap"><div class="pbfill" style="width:92%"></div></div></div>
+          <div style="margin-bottom:9px;"><div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span style="font-size:12px;color:var(--text);">Min Jung Ko</span><span style="font-size:12px;color:var(--sage);">88%</span></div><div class="pbwrap"><div class="pbfill" style="width:88%"></div></div></div>
+          <div><div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span style="font-size:12px;color:var(--text);">Su Ying Chen</span><span style="font-size:12px;color:var(--sage);">82%</span></div><div class="pbwrap"><div class="pbfill" style="width:82%"></div></div></div>
         </div>
       </div>
     </div>
@@ -517,7 +579,7 @@
         <button class="stab" id="st-retention" onclick="switchCSAT('retention-tab','st-retention')" data-k="retention">Retention</button>
       </div>
       <div id="live-tab" class="sec">
-        <div class="notif-banner"><div style="font-size:18px;">🔔</div><div><div style="font-size:13px;font-weight:600;color:var(--pink-dark);" data-k="newReviewAlert">New 5-star review just came in!</div><div style="font-size:12px;color:var(--pink-deep);margin-top:2px;" data-k="newReviewSub">Hai Linh — "Best nail treatment ever at SHURA!"</div></div></div>
+        <div class="notif-banner"><div style="font-size:18px;">🔔</div><div><div style="font-size:13px;font-weight:600;color:var(--sage-dark);" data-k="newReviewAlert">New 5-star review just came in!</div><div style="font-size:12px;color:var(--sage-deep);margin-top:2px;" data-k="newReviewSub">Hai Linh — "Best nail treatment ever at SHURA!"</div></div></div>
         <div class="sec-title" data-k="todayReviews">Today's reviews</div>
         <div class="rvcard"><div class="rvtop"><div class="rvnm">Sarah M. → Hai Linh Tran</div><div class="rvtime">2 min · ★★★★★</div></div><div class="rvtxt">"She remembered exactly what I needed. Best nail treatment ever at SHURA!"</div><div class="rvmeta">Glebe · Nail Treatment</div></div>
         <div class="rvcard"><div class="rvtop"><div class="rvnm">Tina L. → Xiao Wei</div><div class="rvtime">1h · ★★★★★</div></div><div class="rvtxt">"So professional and gentle. My lashes look incredible!"</div><div class="rvmeta">Glebe · Lash Treatment</div></div>
@@ -528,14 +590,14 @@
       </div>
       <div id="analytics-tab" class="sec" style="display:none;">
         <div class="twocol">
-          <div style="background:var(--pink-light);border-radius:var(--radius);padding:13px;text-align:center;"><div style="font-size:36px;font-weight:600;color:var(--pink);line-height:1;">4.7</div><div style="font-size:11px;color:var(--pink-deep);margin-top:3px;" data-k="avgRating">Avg rating</div><div style="font-size:12px;color:var(--pink-deep);">★★★★★</div></div>
+          <div style="background:var(--sage-light);border-radius:var(--radius);padding:13px;text-align:center;"><div style="font-size:36px;font-weight:600;color:var(--sage);line-height:1;">4.7</div><div style="font-size:11px;color:var(--sage-deep);margin-top:3px;" data-k="avgRating">Avg rating</div><div style="font-size:12px;color:var(--sage-deep);">★★★★★</div></div>
           <div style="display:flex;flex-direction:column;gap:6px;"><div class="mstat"><div class="mval">87%</div><div class="mlbl" data-k="returnRate">Return rate</div></div><div class="mstat"><div class="mval">142</div><div class="mlbl" data-k="reviewsMonth">Reviews/month</div></div></div>
         </div>
         <div class="sec-title" data-k="ratingBreakdown">Rating breakdown</div>
         <div class="barchart">
-          <div class="brow"><div class="blbl">5★</div><div class="btrack"><div class="bfill" style="width:72%;background:var(--pink);"></div></div><div class="bpct">72%</div></div>
-          <div class="brow"><div class="blbl">4★</div><div class="btrack"><div class="bfill" style="width:18%;background:var(--pink-mid);"></div></div><div class="bpct">18%</div></div>
-          <div class="brow"><div class="blbl">3★</div><div class="btrack"><div class="bfill" style="width:7%;background:#F4C0D1;"></div></div><div class="bpct">7%</div></div>
+          <div class="brow"><div class="blbl">5★</div><div class="btrack"><div class="bfill" style="width:72%;background:var(--sage);"></div></div><div class="bpct">72%</div></div>
+          <div class="brow"><div class="blbl">4★</div><div class="btrack"><div class="bfill" style="width:18%;background:var(--sage-mid);"></div></div><div class="bpct">18%</div></div>
+          <div class="brow"><div class="blbl">3★</div><div class="btrack"><div class="bfill" style="width:7%;background:#C2DBC9;"></div></div><div class="bpct">7%</div></div>
           <div class="brow"><div class="blbl">2★</div><div class="btrack"><div class="bfill" style="width:2%;background:var(--bg3);"></div></div><div class="bpct">2%</div></div>
           <div class="brow"><div class="blbl">1★</div><div class="btrack"><div class="bfill" style="width:1%;background:var(--bg3);"></div></div><div class="bpct">1%</div></div>
         </div>
@@ -543,7 +605,7 @@
         <div class="trow"><span class="tag g" data-k="friendly">Friendly</span><span class="tag g" data-k="relaxing">Relaxing</span><span class="tag g" data-k="professional">Professional</span><span class="tag g" data-k="clean">Clean</span><span class="tag b" data-k="waitTime">Wait time</span><span class="tag b" data-k="parking">Parking</span></div>
       </div>
       <div id="retention-tab" class="sec" style="display:none;">
-        <div style="background:var(--pink-light);border:0.5px solid var(--pink-mid);border-radius:var(--radius);padding:13px;margin-bottom:8px;"><div style="display:flex;justify-content:space-between;align-items:center;"><div><div style="font-size:12px;font-weight:600;color:var(--pink-dark);" data-k="returningWeek">Returning clients this week</div><div style="font-size:11px;color:var(--pink-deep);margin-top:2px;" data-k="sendReminder">Send personalised reminders</div></div><div style="font-size:28px;font-weight:600;color:var(--pink);">12</div></div></div>
+        <div style="background:var(--sage-light);border:0.5px solid var(--sage-mid);border-radius:var(--radius);padding:13px;margin-bottom:8px;"><div style="display:flex;justify-content:space-between;align-items:center;"><div><div style="font-size:12px;font-weight:600;color:var(--sage-dark);" data-k="returningWeek">Returning clients this week</div><div style="font-size:11px;color:var(--sage-deep);margin-top:2px;" data-k="sendReminder">Send personalised reminders</div></div><div style="font-size:28px;font-weight:600;color:var(--sage);">12</div></div></div>
         <div class="card" style="display:flex;justify-content:space-between;align-items:center;"><div><div style="font-size:12px;font-weight:600;color:var(--text);" data-k="lapsedClients">Lapsed clients (60+ days)</div><div style="font-size:11px;color:var(--text2);margin-top:2px;" data-k="winBack">Win-back message ready</div></div><div style="font-size:28px;font-weight:600;color:var(--text);">8</div></div>
         <div class="sec-title" data-k="squareSync">Square Appointment sync</div>
         <div class="card row"><div style="width:34px;height:34px;background:#EAF3DE;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;">✓</div><div><div style="font-size:13px;font-weight:600;color:#3B6D11;" data-k="squareConnected">Square connected</div><div style="font-size:11px;color:var(--text2);margin-top:2px;" data-k="squareSub">Auto-syncing bookings, clients & visit history</div></div></div>
@@ -569,10 +631,10 @@
   <nav class="bnav">
     <button class="bn active" onclick="showPage('schedule',this)"><span class="bn-ico">📅</span><span class="bn-lbl" data-k="navSchedule">Schedule</span></button>
     <button class="bn" onclick="showPage('notices',this)"><span class="bn-ico">📢</span><span class="bn-lbl" data-k="navNotices">Notices</span></button>
-    <button class="bn" onclick="showPage('eval',this)"><span class="bn-ico">⭐</span><span class="bn-lbl" data-k="navEval">Evaluation</span></button>
-    <button class="bn" onclick="showPage('inventory',this)"><span class="bn-ico">📦</span><span class="bn-lbl" data-k="navInventory">Inventory</span></button>
+    <button class="bn" onclick="showPage('team',this)"><span class="bn-ico">🎂</span><span class="bn-lbl" data-k="navTeam">Team</span></button>
+    <button class="bn" onclick="showPage('time',this)"><span class="bn-ico">⏱</span><span class="bn-lbl" data-k="navTime">Time</span></button>
+    <button class="bn" onclick="showPage('inventory',this)"><span class="bn-ico">📦</span><span class="bn-lbl" data-k="navInventory">Stock</span></button>
     <button class="bn" onclick="showPage('clients',this)"><span class="bn-ico">💬</span><span class="bn-lbl" data-k="navClients">Clients</span></button>
-    <button class="bn" onclick="showPage('wages',this)"><span class="bn-ico">💰</span><span class="bn-lbl" data-k="navWages">Wages</span></button>
   </nav>
 
   <!-- TOAST -->
@@ -618,6 +680,29 @@
   <!-- INVENTORY DETAIL -->
   <div class="overlay" id="invDetailOv"><div class="ov-hdr"><button class="back" onclick="closeOv('invDetailOv')">← Back</button><div class="ov-t" id="invDetailTitle">Item Detail</div></div><div class="ov-body" id="invDetailBody"></div></div>
 
+
+  <!-- ADD BIRTHDAY -->
+  <div class="overlay" id="addBdayOv">
+    <div class="ov-hdr"><button class="back" onclick="closeOv('addBdayOv')" data-k="back">← Back</button><div class="ov-t" data-k="addBirthday">Add Birthday</div></div>
+    <div class="ov-body">
+      <div class="form-field"><label class="form-lbl" data-k="staffName">Staff name</label><select class="form-input" id="bdayName"><option>Hai Linh Tran</option><option>Xiao Wei</option><option>Min Jung Ko</option><option>Su Ying Chen</option></select></div>
+      <div class="form-field"><label class="form-lbl" data-k="birthday">Birthday (day & month)</label><input type="date" class="form-input" id="bdayDate"></div>
+      <button class="save-btn" onclick="saveBirthday()">Save Birthday 🎂</button>
+    </div>
+  </div>
+
+  <!-- ADD EVENT -->
+  <div class="overlay" id="addEventOv">
+    <div class="ov-hdr"><button class="back" onclick="closeOv('addEventOv')" data-k="back">← Back</button><div class="ov-t" data-k="addEvent">Add Event</div></div>
+    <div class="ov-body">
+      <div class="form-field"><label class="form-lbl" data-k="eventTitle">Event title</label><input type="text" class="form-input" id="eventTitle" placeholder="e.g. Team dinner, Training day..."></div>
+      <div class="form-field"><label class="form-lbl" data-k="date">Date</label><input type="date" class="form-input" id="eventDate"></div>
+      <div class="form-field"><label class="form-lbl" data-k="time">Time</label><input type="time" class="form-input" id="eventTime" value="18:00"></div>
+      <div class="form-field"><label class="form-lbl" data-k="location">Location</label><select class="form-input" id="eventLoc"><option>All locations</option><option>Glebe</option><option>Surry Hills</option><option>Ultimo</option><option>External venue</option></select></div>
+      <div class="form-field"><label class="form-lbl" data-k="description">Description</label><textarea class="form-textarea" id="eventDesc" placeholder="Details..."></textarea></div>
+      <button class="save-btn" onclick="saveEvent()">Save Event 🎉</button>
+    </div>
+  </div>
 </div><!-- end app-shell -->
 
 <script>
@@ -1068,6 +1153,248 @@ document.addEventListener('DOMContentLoaded', () => {
   const shiftDateEl = document.getElementById('shiftDate');
   if (shiftDateEl) shiftDateEl.value = today;
 });
+
+// ═══════════════════════════════════════════
+// BIRTHDAY DATA & LOGIC
+// ═══════════════════════════════════════════
+let birthdays = [
+  {id:1,name:'Hai Linh Tran',date:'04-15',avatar:'av-pk',initials:'HL'},
+  {id:2,name:'Xiao Wei',date:'05-03',avatar:'av-tl',initials:'XW'},
+  {id:3,name:'Min Jung Ko',date:'06-22',avatar:'av-pu',initials:'MK'},
+  {id:4,name:'Su Ying Chen',date:'08-10',avatar:'av-am',initials:'SY'},
+];
+
+function daysUntilBirthday(dateStr) {
+  const today = new Date();
+  const [m,d] = dateStr.split('-').map(Number);
+  let bday = new Date(today.getFullYear(), m-1, d);
+  if (bday < today) bday = new Date(today.getFullYear()+1, m-1, d);
+  return Math.round((bday - today)/(1000*60*60*24));
+}
+
+function renderBirthdays() {
+  const list = document.getElementById('bday-list');
+  if (!list) return;
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const sorted = [...birthdays].sort((a,b)=>daysUntilBirthday(a.date)-daysUntilBirthday(b.date));
+  list.innerHTML = sorted.map(b => {
+    const days = daysUntilBirthday(b.date);
+    const [m,d] = b.date.split('-');
+    const dateStr = months[parseInt(m)-1]+' '+parseInt(d);
+    let cardCls='', countdown='';
+    if (days===0){cardCls='today';countdown='🎂 Today!';}
+    else if (days<=7){cardCls='soon';countdown='In '+days+' day'+(days>1?'s':'')+'!';}
+    else{countdown='In '+days+' days';}
+    return '<div class="bday-card '+cardCls+'"><div class="av '+b.avatar+'" style="width:40px;height:40px;font-size:13px;flex-shrink:0;">'+b.initials+'</div><div class="f1"><div class="bday-name">'+b.name+'</div><div class="bday-date">'+dateStr+'</div><div class="bday-countdown">'+countdown+'</div></div>'+(days===0?'<span class="pill p-bday">🎉 Birthday!</span>':days<=7?'<span class="pill p-new">Soon</span>':'')+'</div>';
+  }).join('');
+}
+
+function saveBirthday() {
+  const name = document.getElementById('bdayName').value;
+  const dateVal = document.getElementById('bdayDate').value;
+  if (!dateVal){showToast('Please select a date');return;}
+  const d = new Date(dateVal);
+  const md = String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+  const avatars={'Hai Linh Tran':'av-pk','Xiao Wei':'av-tl','Min Jung Ko':'av-pu','Su Ying Chen':'av-am'};
+  const initMap={'Hai Linh Tran':'HL','Xiao Wei':'XW','Min Jung Ko':'MK','Su Ying Chen':'SY'};
+  const existing = birthdays.find(b=>b.name===name);
+  if (existing){existing.date=md;}else{birthdays.push({id:Date.now(),name,date:md,avatar:avatars[name]||'av-pk',initials:initMap[name]||'??'});}
+  closeOv('addBdayOv');
+  renderBirthdays();
+  showToast('✓ Birthday saved!');
+}
+
+// ═══════════════════════════════════════════
+// EVENTS
+// ═══════════════════════════════════════════
+let events = [
+  {id:1,title:'Team Dinner 🍜',date:'2025-04-20',time:'7:00 PM',loc:'Glebe',desc:'Monthly team dinner'},
+  {id:2,title:'Skincare Training Day',date:'2025-04-28',time:'10:00 AM',loc:'Ultimo',desc:'Advanced skincare workshop'},
+  {id:3,title:'SHURA 2nd Anniversary 🎉',date:'2025-05-15',time:'6:00 PM',loc:'All locations',desc:'Celebrating 2 years!'},
+];
+
+function renderEvents() {
+  const list = document.getElementById('events-list');
+  if (!list) return;
+  const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const sorted = [...events].sort((a,b)=>new Date(a.date)-new Date(b.date));
+  list.innerHTML = sorted.map(e=>{
+    const d = new Date(e.date);
+    return '<div class="event-card"><div class="event-date-box"><div class="event-day">'+d.getDate()+'</div><div class="event-month">'+months[d.getMonth()]+'</div></div><div class="f1"><div class="event-title">'+e.title+'</div><div class="event-desc">'+e.time+(e.desc?' · '+e.desc:'')+'</div><div class="event-loc">📍 '+e.loc+'</div></div></div>';
+  }).join('');
+}
+
+function saveEvent() {
+  const title = document.getElementById('eventTitle').value.trim();
+  const date = document.getElementById('eventDate').value;
+  if (!title||!date){showToast('Please fill in title and date');return;}
+  events.push({id:Date.now(),title,date,time:document.getElementById('eventTime').value,loc:document.getElementById('eventLoc').value,desc:document.getElementById('eventDesc').value.trim()});
+  document.getElementById('eventTitle').value='';
+  document.getElementById('eventDesc').value='';
+  closeOv('addEventOv');
+  renderEvents();
+  showToast('✓ Event added!');
+}
+
+// ═══════════════════════════════════════════
+// CLOCK IN / OUT
+// ═══════════════════════════════════════════
+let isClockedIn=false, clockInTime=null, timeEntries=[];
+
+function toggleClock() {
+  if (!isClockedIn) {
+    isClockedIn=true; clockInTime=new Date();
+    document.getElementById('clockStatus').textContent='Clocked in ✓';
+    document.getElementById('clockStatus').className='clock-status clocked-in';
+    document.getElementById('clockBtn').className='clock-btn out';
+    document.getElementById('clockBtnText').setAttribute('data-k','clockOut');
+    applyLang();
+    showToast('✓ Clocked in at '+fmtTime(clockInTime));
+  } else {
+    isClockedIn=false;
+    const out=new Date();
+    const hrs=(out-clockInTime)/(1000*60*60);
+    timeEntries.unshift({date:fmtDateShort(clockInTime),inTime:fmtTime(clockInTime),outTime:fmtTime(out),hours:hrs});
+    clockInTime=null;
+    document.getElementById('clockStatus').setAttribute('data-k','notClockedIn');
+    document.getElementById('clockStatus').className='clock-status clocked-out';
+    document.getElementById('clockBtn').className='clock-btn in';
+    document.getElementById('clockBtnText').setAttribute('data-k','clockIn');
+    applyLang();
+    updateTimeStats(); renderTimeLog();
+    showToast('✓ Clocked out — '+hrs.toFixed(1)+'h logged');
+  }
+}
+
+function updateTimeStats() {
+  const todayStr=fmtDateShort(new Date());
+  const todayHrs=timeEntries.filter(e=>e.date===todayStr).reduce((s,e)=>s+e.hours,0);
+  const weekHrs=timeEntries.reduce((s,e)=>s+e.hours,0);
+  const tEl=document.getElementById('todayTotal');
+  const wEl=document.getElementById('weekTotal');
+  if(tEl)tEl.textContent=fmtHours(todayHrs);
+  if(wEl)wEl.textContent=fmtHours(weekHrs);
+}
+
+function renderTimeLog() {
+  const list=document.getElementById('timeLogList');
+  if(!list)return;
+  const countEl=document.getElementById('logCount');
+  if(countEl)countEl.textContent=timeEntries.length+' entries';
+  if(!timeEntries.length){list.innerHTML='<div style="padding:16px;text-align:center;font-size:12px;color:var(--text3);" data-k="noEntriesYet">No entries yet.</div>';return;}
+  list.innerHTML=timeEntries.map(e=>'<div class="time-log-row"><div class="time-dot dot-in"></div><div class="time-log-date">'+e.date+'</div><div class="time-log-hrs">'+e.inTime+' — '+e.outTime+'</div><div class="time-log-total">'+fmtHours(e.hours)+'</div></div>').join('');
+}
+
+function fmtHours(h){const hrs=Math.floor(h);const mins=Math.round((h-hrs)*60);return hrs+'h '+mins+'m';}
+function fmtTime(d){return d.toLocaleTimeString('en-AU',{hour:'2-digit',minute:'2-digit'});}
+function fmtDateShort(d){return d.toLocaleDateString('en-AU',{day:'2-digit',month:'short'});}
+
+function startLiveClock() {
+  function tick(){
+    const now=new Date();
+    const h=String(now.getHours()).padStart(2,'0');
+    const m=String(now.getMinutes()).padStart(2,'0');
+    const s=String(now.getSeconds()).padStart(2,'0');
+    const el=document.getElementById('liveClock');
+    const dateEl=document.getElementById('liveDate');
+    if(el)el.textContent=h+':'+m+':'+s;
+    if(dateEl)dateEl.textContent=now.toLocaleDateString('en-AU',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  }
+  tick(); setInterval(tick,1000);
+}
+
+// ═══════════════════════════════════════════
+// WAGE CALCULATOR
+// ═══════════════════════════════════════════
+let staffWages=[
+  {name:'Hai Linh Tran',initials:'HL',avatar:'av-pk',rate:30,hours:38},
+  {name:'Xiao Wei',initials:'XW',avatar:'av-tl',rate:28,hours:34},
+  {name:'Min Jung Ko',initials:'MK',avatar:'av-pu',rate:28,hours:30},
+  {name:'Su Ying Chen',initials:'SY',avatar:'av-am',rate:25.5,hours:28},
+];
+
+function renderWageCalc() {
+  const list=document.getElementById('staffWageList');
+  if(!list)return;
+  list.innerHTML=staffWages.map((s,i)=>{
+    const total=(s.rate*s.hours).toFixed(2);
+    return '<div class="staff-wage-row"><div class="staff-wage-hdr"><div class="av '+s.avatar+'">'+s.initials+'</div><div class="f1"><div class="nm">'+s.name+'</div><div class="hint" data-k="beautician">Beautician</div></div><div style="font-size:16px;font-weight:700;color:var(--sage-deep);" id="wage-total-'+i+'">$'+total+'</div></div><div class="wage-fields"><div class="wage-field"><div class="wage-field-lbl">Hourly rate ($/hr)</div><input type="number" value="'+s.rate.toFixed(2)+'" step="0.50" min="0" oninput="updateWage('+i+','rate',this.value)"></div><div class="wage-field"><div class="wage-field-lbl">Hours worked</div><input type="number" value="'+s.hours+'" step="0.5" min="0" oninput="updateWage('+i+','hours',this.value)"></div></div></div>';
+  }).join('');
+  updateWageSummary();
+}
+
+function updateWage(i,field,val){
+  staffWages[i][field]=parseFloat(val)||0;
+  const total=staffWages[i].rate*staffWages[i].hours;
+  const el=document.getElementById('wage-total-'+i);
+  if(el)el.textContent='$'+total.toFixed(2);
+  updateWageSummary();
+}
+
+function updateWageSummary(){
+  const totalHrs=staffWages.reduce((s,w)=>s+w.hours,0);
+  const totalWage=staffWages.reduce((s,w)=>s+(w.rate*w.hours),0);
+  const avgRate=totalHrs>0?totalWage/totalHrs:0;
+  const a=document.getElementById('summaryTotalHrs');
+  const b=document.getElementById('summaryAvgRate');
+  const c=document.getElementById('summaryTotal');
+  if(a)a.textContent=totalHrs.toFixed(1)+'h';
+  if(b)b.textContent='$'+avgRate.toFixed(2);
+  if(c)c.textContent='$'+totalWage.toFixed(2);
+}
+
+// ═══════════════════════════════════════════
+// TEAM PAGE NAVIGATION
+// ═══════════════════════════════════════════
+function switchTeam(tab,activeId){
+  ['bday-tab','events-tab'].forEach(t=>document.getElementById(t).style.display=t===tab?'block':'none');
+  ['st-bday','st-events'].forEach(id=>document.getElementById(id).classList.toggle('active',id===activeId));
+}
+function switchTime(tab,activeId){
+  ['clock-tab','wagecalc-tab'].forEach(t=>document.getElementById(t).style.display=t===tab?'block':'none');
+  ['st-clock','st-wagecalc'].forEach(id=>document.getElementById(id).classList.toggle('active',id===activeId));
+}
+
+// New language keys for new features
+const extraLang = {
+  en:{birthdays:'Birthdays',events:'Events',upcomingBdays:'Upcoming birthdays',addBirthday:'Add birthday',upcomingEvents:'Upcoming events',addEvent:'Add event',eventTitle:'Event title',date:'Date',time:'Time',location:'Location',description:'Description',staffName:'Staff name',birthday:'Birthday',timeClock:'Clock',wageCalc:'Wages',notClockedIn:'Not clocked in',clockIn:'Clock In',clockOut:'Clock Out',thisWeek:'This week',today:'Today',timeLog:'Time log',recentEntries:'Recent entries',noEntriesYet:'No entries yet. Clock in to start!',wageCalcTitle:'Wage calculator',monthSummary:'Monthly total',totalHrsWorked:'Total hours',avgHourlyRate:'Avg hourly rate',totalWageBill:'Total wage bill',navTeam:'Team',navTime:'Time'},
+  zh:{birthdays:'生日',events:'活动',upcomingBdays:'即将到来的生日',addBirthday:'添加生日',upcomingEvents:'即将举办的活动',addEvent:'添加活动',eventTitle:'活动名称',date:'日期',time:'时间',location:'地点',description:'描述',staffName:'员工姓名',birthday:'生日',timeClock:'打卡',wageCalc:'工资',notClockedIn:'未打卡',clockIn:'上班打卡',clockOut:'下班打卡',thisWeek:'本周',today:'今天',timeLog:'考勤记录',recentEntries:'最近记录',noEntriesYet:'暂无记录，打卡开始！',wageCalcTitle:'工资计算',monthSummary:'月度汇总',totalHrsWorked:'总工时',avgHourlyRate:'平均时薪',totalWageBill:'工资总额',navTeam:'团队',navTime:'打卡'},
+  vi:{birthdays:'Sinh nhật',events:'Sự kiện',upcomingBdays:'Sinh nhật sắp tới',addBirthday:'Thêm sinh nhật',upcomingEvents:'Sự kiện sắp tới',addEvent:'Thêm sự kiện',eventTitle:'Tên sự kiện',date:'Ngày',time:'Giờ',location:'Địa điểm',description:'Mô tả',staffName:'Tên nhân viên',birthday:'Sinh nhật',timeClock:'Chấm công',wageCalc:'Lương',notClockedIn:'Chưa chấm công',clockIn:'Vào ca',clockOut:'Ra ca',thisWeek:'Tuần này',today:'Hôm nay',timeLog:'Nhật ký',recentEntries:'Gần đây',noEntriesYet:'Chưa có dữ liệu!',wageCalcTitle:'Tính lương',monthSummary:'Tổng kết tháng',totalHrsWorked:'Tổng giờ',avgHourlyRate:'Lương/giờ TB',totalWageBill:'Tổng lương',navTeam:'Nhóm',navTime:'Chấm công'},
+  ko:{birthdays:'생일',events:'이벤트',upcomingBdays:'다가오는 생일',addBirthday:'생일 추가',upcomingEvents:'다가오는 이벤트',addEvent:'이벤트 추가',eventTitle:'이벤트 제목',date:'날짜',time:'시간',location:'장소',description:'설명',staffName:'직원 이름',birthday:'생일',timeClock:'근무 시간',wageCalc:'급여',notClockedIn:'출근 전',clockIn:'출근',clockOut:'퇴근',thisWeek:'이번 주',today:'오늘',timeLog:'근무 기록',recentEntries:'최근 기록',noEntriesYet:'기록 없음. 출근 버튼을 눌러주세요!',wageCalcTitle:'급여 계산',monthSummary:'월 합계',totalHrsWorked:'총 근무시간',avgHourlyRate:'평균 시급',totalWageBill:'총 급여',navTeam:'팀',navTime:'근무'}
+};
+
+// Patch applyLang to include extra keys
+const _origApplyLang = applyLang;
+applyLang = function() {
+  _origApplyLang();
+  const t = extraLang[lang];
+  if (!t) return;
+  document.querySelectorAll('[data-k]').forEach(el => {
+    const k = el.getAttribute('data-k');
+    if (t[k] !== undefined) el.textContent = t[k];
+  });
+};
+
+// Patch showPage to render team/time data
+const _origShowPage = showPage;
+showPage = function(name, el) {
+  _origShowPage(name, el);
+  if (name==='team'){renderBirthdays();renderEvents();}
+  if (name==='time'){renderWageCalc();}
+};
+
+// Start live clock on load
+document.addEventListener('DOMContentLoaded', function() {
+  startLiveClock();
+  renderBirthdays();
+  renderEvents();
+  renderWageCalc();
+  const today = new Date().toISOString().split('T')[0];
+  const bdEl=document.getElementById('bdayDate');if(bdEl)bdEl.value=today;
+  const evEl=document.getElementById('eventDate');if(evEl)evEl.value=today;
+  const p={pill:'p-bday',background:'#FFF0E6',color:'#B85000'};
+});
+
 </script>
 </body>
 </html>
