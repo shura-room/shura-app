@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>SHURA. Staff App</title>
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#B85C7A" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="SHURA" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    :root {
+      --pink: #B85C7A;
+      --pink-light: #FBEAF0;
+      --pink-mid: #ED93B1;
+      --pink-dark: #72243E;
+      --pink-deep: #993556;
+      --bg: #ffffff;
+      --bg2: #f7f7f5;
+      --bg3: #f0ede8;
+      --text: #1a1a1a;
+      --text2: #666660;
+      --text3: #999994;
+      --border: rgba(0,0,0,0.12);
+      --border2: rgba(0,0,0,0.22);
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a1a;
+        --bg2: #242424;
+        --bg3: #2e2e2e;
+        --text: #f0ede8;
+        --text2: #a0a09a;
+        --text3: #666660;
+        --border: rgba(255,255,255,0.12);
+        --border2: rgba(255,255,255,0.22);
+      }
+    }
+    html, body { height: 100%; overflow: hidden; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg3); }
+    .app-shell {
+      max-width: 480px;
+      margin: 0 auto;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      background: var(--bg);
+      position: relative;
+      box-shadow: 0 0 40px rgba(0,0,0,0.15);
+    }
+    /* ── TOPBAR ── */
+    .topbar {
+      padding: 12px 16px 10px;
+      border-bottom: 0.5px solid var(--border);
+      flex-shrink: 0;
+      background: var(--bg);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .topbar-row { display: flex; align-items: center; justify-content: space-between; }
+    .brand { font-size: 22px; font-weight: 600; letter-spacing: 4px; color: var(--text); }
+    .brand span { color: var(--pink); }
+    .jenny-badge {
+      font-size: 11px; background: #F4C0D1; color: var(--pink-dark);
+      padding: 4px 11px; border-radius: 20px; font-weight: 600; cursor: pointer;
+      border: none; transition: opacity .15s;
+    }
+    .jenny-badge:hover { opacity: .8; }
+    .lang-bar { display: flex; gap: 4px; margin-top: 8px; }
+    .lang-btn {
+      font-size: 11px; padding: 4px 9px; border-radius: 20px;
+      border: 0.5px solid var(--border); background: var(--bg2);
+      color: var(--text2); cursor: pointer; transition: all .15s;
+    }
+    .lang-btn.active { background: var(--pink); color: #fff; border-color: var(--pink); }
+    .loc-bar { display: flex; gap: 4px; margin-top: 6px; flex-wrap: wrap; }
+    .loc-btn {
+      font-size: 11px; padding: 4px 9px; border-radius: 20px;
+      border: 0.5px solid var(--border); background: var(--bg2);
+      color: var(--text2); cursor: pointer; transition: all .15s;
+    }
+    .loc-btn.active { background: var(--pink-light); color: var(--pink-dark); border-color: var(--pink-mid); }
+    /* ── BOTTOM NAV ── */
+    .bnav {
+      display: flex; border-top: 0.5px solid var(--border);
+      background: var(--bg); flex-shrink: 0;
+      padding-bottom: env(safe-area-inset-bottom, 0px);
+    }
+    .bn { flex: 1; padding: 9px 2px 7px; text-align: center; cursor: pointer; border-top: 2px solid transparent; transition: all .15s; background: none; border-left: none; border-right: none; border-bottom: none; }
+    .bn.active { border-top-color: var(--pink); }
+    .bn-ico { font-size: 16px; line-height: 1; display: block; }
+    .bn-lbl { font-size: 9px; color: var(--text3); margin-top: 2px; display: block; }
+    .bn.active .bn-lbl { color: var(--pink); font-weight: 600; }
+    /* ── CONTENT ── */
+    .content { flex: 1; overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; }
+    .page { display: none; }
+    .page.active { display: block; }
+    .sec { padding: 13px 16px; }
+    .sec-title { font-size: 10px; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: .6px; margin-bottom: 9px; }
+    /* ── CARDS ── */
+    .card { background: var(--bg2); border-radius: var(--radius); padding: 12px 14px; margin-bottom: 8px; }
+    .bcard { border: 0.5px solid var(--border); border-radius: var(--radius); padding: 12px 14px; margin-bottom: 8px; cursor: pointer; transition: background .15s; }
+    .bcard:hover, .bcard:active { background: var(--bg2); }
+    .bcard.pinned { border-color: var(--pink-mid); background: var(--pink-light); }
+    /* ── PILLS ── */
+    .pill { font-size: 10px; padding: 2px 7px; border-radius: 20px; white-space: nowrap; display: inline-block; font-weight: 500; }
+    .p-must { background: #FCEBEB; color: #A32D2D; }
+    .p-pin { background: var(--pink-light); color: var(--pink-deep); }
+    .p-new { background: #EAF3DE; color: #3B6D11; }
+    .p-task { background: #E6F1FB; color: #185FA5; }
+    .p-warn { background: #FAEEDA; color: #854F0B; }
+    .p-on { background: #EAF3DE; color: #3B6D11; }
+    .p-off { background: #F1EFE8; color: #5F5E5A; }
+    .p-low { background: #FCEBEB; color: #A32D2D; }
+    .p-ok { background: #EAF3DE; color: #3B6D11; }
+    /* ── AVATARS ── */
+    .av { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; flex-shrink: 0; }
+    .av-pk { background: #FBEAF0; color: #993556; }
+    .av-tl { background: #E1F5EE; color: #0F6E56; }
+    .av-pu { background: #EEEDFE; color: #3C3489; }
+    .av-am { background: #FAEEDA; color: #854F0B; }
+    /* ── UTILS ── */
+    .row { display: flex; align-items: center; gap: 10px; }
+    .f1 { flex: 1; min-width: 0; }
+    .nm { font-size: 13px; font-weight: 600; color: var(--text); }
+    .sub { font-size: 11px; color: var(--text2); margin-top: 2px; }
+    .hint { font-size: 10px; color: var(--text3); margin-top: 1px; }
+    .add-btn {
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+      width: 100%; padding: 11px; border-radius: var(--radius);
+      border: 0.5px dashed var(--border2); background: transparent;
+      color: var(--text2); font-size: 12px; cursor: pointer; margin-top: 4px;
+      transition: background .15s;
+    }
+    .add-btn:hover { background: var(--bg2); }
+    /* ── STATS ── */
+    .sgrid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-bottom: 12px; }
+    .sbox { background: var(--bg2); border-radius: var(--radius-sm); padding: 11px; text-align: center; }
+    .sv { font-size: 20px; font-weight: 600; color: var(--text); }
+    .sl { font-size: 10px; color: var(--text3); margin-top: 2px; }
+    /* ── WEEK STRIP ── */
+    .wstrip { display: flex; gap: 4px; margin-bottom: 12px; }
+    .dp { flex: 1; text-align: center; padding: 7px 2px; border-radius: var(--radius-sm); cursor: pointer; transition: background .15s; }
+    .dp .dl { font-size: 9px; color: var(--text3); }
+    .dp .dn { font-size: 13px; font-weight: 600; color: var(--text); margin-top: 2px; }
+    .dp.active { background: var(--pink); }
+    .dp.active .dl, .dp.active .dn { color: #fff; }
+    .dp.hs::after { content: ''; display: block; width: 4px; height: 4px; border-radius: 50%; background: var(--pink-mid); margin: 2px auto 0; }
+    .dp.active.hs::after { background: rgba(255,255,255,.5); }
+    /* ── SUB TABS ── */
+    .stabs { display: flex; border-bottom: 0.5px solid var(--border); background: var(--bg); position: sticky; top: 0; z-index: 5; }
+    .stab { flex: 1; padding: 10px 4px; text-align: center; font-size: 12px; color: var(--text3); cursor: pointer; border-bottom: 2px solid transparent; transition: all .15s; background: none; border-top: none; border-left: none; border-right: none; }
+    .stab.active { color: var(--pink); border-bottom-color: var(--pink); font-weight: 600; }
+    /* ── FILTER ROW ── */
+    .frow { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 10px; }
+    .fb { font-size: 11px; padding: 4px 10px; border-radius: 20px; border: 0.5px solid var(--border); background: var(--bg2); color: var(--text2); cursor: pointer; transition: all .15s; }
+    .fb.active { background: var(--pink-light); color: var(--pink-deep); border-color: var(--pink-mid); }
+    /* ── NOTICE ── */
+    .ntop { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+    .ntitle { font-size: 13px; font-weight: 600; color: var(--text); line-height: 1.4; }
+    .bcard.pinned .ntitle { color: var(--pink-dark); }
+    .nmeta { font-size: 10px; color: var(--text3); margin-top: 4px; }
+    .nprev { font-size: 12px; color: var(--text2); margin-top: 4px; line-height: 1.5; }
+    .udot { width: 6px; height: 6px; border-radius: 50%; background: var(--pink); flex-shrink: 0; margin-top: 4px; }
+    /* ── MANUAL ── */
+    .mcat { margin-bottom: 5px; }
+    .mhdr { display: flex; align-items: center; justify-content: space-between; padding: 11px 13px; background: var(--bg2); border-radius: var(--radius-sm); cursor: pointer; border: none; width: 100%; text-align: left; transition: background .15s; }
+    .mhdr:hover { background: var(--bg3); }
+    .mleft { display: flex; align-items: center; gap: 9px; }
+    .mico { width: 28px; height: 28px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-size: 13px; }
+    .ci-pk { background: #FBEAF0; } .ci-tl { background: #E1F5EE; } .ci-pu { background: #EEEDFE; } .ci-am { background: #FAEEDA; } .ci-bl { background: #E6F1FB; }
+    .mar { font-size: 10px; color: var(--text3); transition: transform .2s; }
+    .mar.open { transform: rotate(90deg); }
+    .mitems { display: none; padding: 3px 0 5px 10px; }
+    .mitems.open { display: block; }
+    .mi { display: flex; align-items: center; gap: 8px; padding: 8px 11px; border-radius: var(--radius-sm); cursor: pointer; margin-bottom: 1px; transition: background .15s; border: none; background: none; width: 100%; text-align: left; }
+    .mi:hover, .mi:active { background: var(--bg2); }
+    .midot { width: 5px; height: 5px; border-radius: 50%; background: var(--border2); flex-shrink: 0; }
+    /* ── EVAL ── */
+    .ecard { border: 0.5px solid var(--border); border-radius: var(--radius); padding: 13px 14px; margin-bottom: 8px; }
+    .ehdr { display: flex; align-items: center; gap: 10px; margin-bottom: 11px; }
+    .crow { display: flex; align-items: center; justify-content: space-between; padding: 6px 0; border-bottom: 0.5px solid var(--border); }
+    .crow:last-child { border-bottom: none; }
+    .clbl { font-size: 12px; color: var(--text); }
+    .mstars { display: flex; gap: 2px; }
+    .ms { font-size: 13px; color: #E9A82E; }
+    .ms.e { color: var(--border2); }
+    .scirc { width: 42px; height: 42px; border-radius: 50%; background: var(--pink-light); display: flex; align-items: center; justify-content: center; flex-direction: column; flex-shrink: 0; }
+    .snum { font-size: 13px; font-weight: 600; color: var(--pink); line-height: 1; }
+    .smax { font-size: 9px; color: var(--pink-mid); }
+    .pbwrap { background: var(--bg2); border-radius: 20px; height: 6px; flex: 1; overflow: hidden; }
+    .pbfill { height: 100%; border-radius: 20px; background: var(--pink); transition: width .4s; }
+    .lrow { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 0.5px solid var(--border); }
+    .lrow:last-child { border-bottom: none; }
+    .rk { font-size: 14px; font-weight: 600; width: 18px; text-align: center; color: var(--text3); }
+    .gold { color: #E9A82E; } .silver { color: #888780; } .bronze { color: #BA7517; }
+    .vgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; margin-bottom: 13px; }
+    .vcard { border: 0.5px solid var(--border); border-radius: var(--radius); padding: 12px; }
+    /* ── INVENTORY ── */
+    .inv-summary { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-bottom: 12px; }
+    .inv-sbox { border-radius: var(--radius-sm); padding: 11px; text-align: center; }
+    .inv-sbox.total { background: var(--bg2); }
+    .inv-sbox.low { background: #FCEBEB; }
+    .inv-sbox.ok { background: #EAF3DE; }
+    .inv-sv { font-size: 20px; font-weight: 600; }
+    .inv-sl { font-size: 10px; margin-top: 2px; font-weight: 500; }
+    .inv-sbox.total .inv-sv { color: var(--text); } .inv-sbox.total .inv-sl { color: var(--text3); }
+    .inv-sbox.low .inv-sv, .inv-sbox.low .inv-sl { color: #A32D2D; }
+    .inv-sbox.ok .inv-sv, .inv-sbox.ok .inv-sl { color: #3B6D11; }
+    .inv-item { border: 0.5px solid var(--border); border-radius: var(--radius); padding: 12px 14px; margin-bottom: 7px; cursor: pointer; transition: background .15s; }
+    .inv-item:hover, .inv-item:active { background: var(--bg2); }
+    .inv-item.low-stock { border-color: #F7C1C1; background: #FCEBEB; }
+    .inv-item.low-stock:hover { background: #f5baba; }
+    .inv-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+    .inv-name { font-size: 13px; font-weight: 600; color: var(--text); }
+    .inv-item.low-stock .inv-name { color: #A32D2D; }
+    .inv-cat { font-size: 11px; color: var(--text2); margin-top: 2px; }
+    .inv-qty-row { display: flex; align-items: center; justify-content: space-between; margin-top: 9px; }
+    .qty-ctrl { display: flex; align-items: center; gap: 8px; }
+    .qty-btn { width: 28px; height: 28px; border-radius: 50%; border: 0.5px solid var(--border2); background: var(--bg); color: var(--text); font-size: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center; line-height: 1; transition: background .15s; }
+    .qty-btn:hover { background: var(--bg2); }
+    .qty-num { font-size: 14px; font-weight: 600; color: var(--text); min-width: 24px; text-align: center; }
+    .qty-unit { font-size: 11px; color: var(--text3); }
+    .reorder-btn { font-size: 11px; padding: 5px 11px; border-radius: 20px; border: none; background: var(--pink-light); color: var(--pink-deep); cursor: pointer; font-weight: 500; transition: opacity .15s; }
+    .reorder-btn:hover { opacity: .8; }
+    .inv-pb { background: var(--bg2); border-radius: 20px; height: 5px; overflow: hidden; margin-top: 8px; }
+    .inv-pb-fill { height: 100%; border-radius: 20px; transition: width .3s; }
+    .inv-pb-green { background: #639922; } .inv-pb-amber { background: #BA7517; } .inv-pb-red { background: #E24B4A; }
+    .inv-pb-label { display: flex; justify-content: space-between; margin-top: 3px; }
+    .inv-consolidated { border: 0.5px solid var(--border); border-radius: var(--radius); overflow: hidden; margin-bottom: 10px; }
+    .inv-con-hdr { background: var(--bg2); padding: 10px 13px; display: flex; align-items: center; justify-content: space-between; }
+    .inv-con-title { font-size: 12px; font-weight: 600; color: var(--text); }
+    .inv-con-row { display: flex; align-items: center; padding: 8px 13px; border-top: 0.5px solid var(--border); }
+    .inv-loc { font-size: 12px; color: var(--text2); width: 88px; flex-shrink: 0; }
+    .inv-bar-wrap { flex: 1; background: var(--bg2); border-radius: 20px; height: 6px; overflow: hidden; margin: 0 8px; }
+    .inv-bar-fill { height: 100%; border-radius: 20px; }
+    /* ── CLIENTS ── */
+    .rvcard { border-left: 3px solid var(--pink); background: var(--pink-light); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 10px 12px; margin-bottom: 7px; }
+    .rvcard.neutral { border-left-color: var(--border2); background: var(--bg2); }
+    .rvtop { display: flex; align-items: center; justify-content: space-between; }
+    .rvnm { font-size: 12px; font-weight: 600; color: var(--pink-dark); }
+    .rvcard.neutral .rvnm { color: var(--text); }
+    .rvtime { font-size: 10px; color: var(--pink-mid); }
+    .rvcard.neutral .rvtime { color: var(--text3); }
+    .rvtxt { font-size: 12px; color: var(--pink-deep); margin-top: 4px; line-height: 1.5; font-style: italic; }
+    .rvcard.neutral .rvtxt { color: var(--text2); }
+    .rvmeta { font-size: 10px; color: var(--pink-mid); margin-top: 3px; }
+    .rvcard.neutral .rvmeta { color: var(--text3); }
+    .notif-banner { background: var(--pink-light); border: 0.5px solid var(--pink-mid); border-radius: var(--radius); padding: 11px 13px; margin-bottom: 10px; display: flex; align-items: flex-start; gap: 10px; }
+    .twocol { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; margin-bottom: 12px; }
+    .mstat { background: var(--bg2); border-radius: var(--radius-sm); padding: 11px; }
+    .mval { font-size: 18px; font-weight: 600; color: var(--text); }
+    .mlbl { font-size: 10px; color: var(--text3); margin-top: 2px; }
+    .barchart { margin-bottom: 13px; }
+    .brow { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+    .blbl { font-size: 11px; color: var(--text2); width: 28px; flex-shrink: 0; text-align: right; }
+    .btrack { flex: 1; background: var(--bg2); border-radius: 20px; height: 7px; overflow: hidden; }
+    .bfill { height: 100%; border-radius: 20px; }
+    .bpct { font-size: 11px; color: var(--text2); width: 26px; text-align: right; }
+    .trow { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 12px; }
+    .tag { font-size: 11px; padding: 3px 9px; border-radius: 20px; border: 0.5px solid var(--border); color: var(--text2); }
+    .tag.g { background: #EAF3DE; color: #3B6D11; border-color: #C0DD97; }
+    .tag.b { background: #FCEBEB; color: #A32D2D; border-color: #F7C1C1; }
+    .fb-card { border: 0.5px solid var(--border); border-radius: var(--radius); padding: 11px 13px; margin-bottom: 7px; }
+    .fb-meta { font-size: 11px; color: var(--text3); margin-top: 4px; display: flex; justify-content: space-between; }
+    /* ── WAGES ── */
+    .wage-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 0.5px solid var(--border); }
+    .wage-row:last-child { border-bottom: none; }
+    .total-row { display: flex; justify-content: space-between; padding: 12px 0 0; }
+    .tlbl { font-size: 13px; font-weight: 600; color: var(--text); }
+    .tamt { font-size: 17px; font-weight: 600; color: var(--pink); }
+    .owner-banner { background: var(--pink-light); border: 0.5px solid var(--pink-mid); border-radius: var(--radius); padding: 9px 13px; margin-bottom: 12px; display: flex; align-items: center; gap: 7px; font-size: 12px; color: var(--pink-dark); }
+    .req-card { border: 0.5px solid var(--border); border-radius: var(--radius); padding: 12px 14px; margin-bottom: 7px; }
+    .btn-row { display: flex; gap: 6px; margin-top: 8px; }
+    .btn-ok { font-size: 12px; padding: 6px 12px; border-radius: var(--radius-sm); border: none; background: #EAF3DE; color: #3B6D11; cursor: pointer; font-weight: 500; }
+    .btn-no { font-size: 12px; padding: 6px 12px; border-radius: var(--radius-sm); border: none; background: #FCEBEB; color: #A32D2D; cursor: pointer; font-weight: 500; }
+    .bstrip { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 7px; margin-bottom: 13px; }
+    .ach { border: 0.5px solid var(--border); border-radius: var(--radius); padding: 12px 9px; text-align: center; }
+    .ach-ico { font-size: 21px; margin-bottom: 4px; }
+    .ach-t { font-size: 11px; font-weight: 600; color: var(--text); }
+    .ach-s { font-size: 10px; color: var(--text3); margin-top: 2px; }
+    .ach-locked { opacity: .35; }
+    /* ── OVERLAY ── */
+    .overlay { display: none; position: absolute; inset: 0; background: var(--bg); border-radius: inherit; overflow-y: auto; z-index: 50; -webkit-overflow-scrolling: touch; }
+    .overlay.open { display: block; }
+    .ov-hdr { padding: 12px 16px; border-bottom: 0.5px solid var(--border); display: flex; align-items: center; gap: 11px; position: sticky; top: 0; background: var(--bg); z-index: 1; }
+    .back { font-size: 13px; color: var(--pink); cursor: pointer; white-space: nowrap; background: none; border: none; font-family: inherit; padding: 0; }
+    .ov-t { font-size: 14px; font-weight: 600; color: var(--text); flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .ov-body { padding: 16px; }
+    .ov-meta { font-size: 11px; color: var(--text3); margin-bottom: 12px; }
+    .ov-content { font-size: 13px; color: var(--text); line-height: 1.8; }
+    .ov-content h3 { font-size: 13px; font-weight: 600; margin: 12px 0 6px; }
+    .ov-content ul { padding-left: 14px; }
+    .ov-content li { margin-bottom: 5px; }
+    .cfbar { margin-top: 16px; padding: 11px 13px; background: var(--pink-light); border-radius: var(--radius); display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    .cftext { font-size: 12px; color: var(--pink-dark); }
+    .cfbtn { font-size: 12px; padding: 7px 14px; background: var(--pink); color: #fff; border: none; border-radius: var(--radius-sm); cursor: pointer; font-weight: 500; transition: opacity .15s; }
+    .cfbtn:hover { opacity: .85; }
+    /* ── FORM ELEMENTS ── */
+    .form-field { margin-bottom: 13px; }
+    .form-lbl { font-size: 11px; color: var(--text3); margin-bottom: 5px; font-weight: 500; display: block; }
+    .form-input { width: 100%; padding: 9px 12px; border-radius: var(--radius-sm); border: 0.5px solid var(--border2); background: var(--bg); color: var(--text); font-size: 13px; font-family: inherit; transition: border-color .15s; }
+    .form-input:focus { outline: none; border-color: var(--pink); }
+    .form-textarea { width: 100%; padding: 9px 12px; border-radius: var(--radius-sm); border: 0.5px solid var(--border2); background: var(--bg); color: var(--text); font-size: 13px; font-family: inherit; resize: vertical; min-height: 80px; transition: border-color .15s; }
+    .form-textarea:focus { outline: none; border-color: var(--pink); }
+    .save-btn { width: 100%; padding: 12px; border-radius: var(--radius); border: none; background: var(--pink); color: #fff; font-size: 13px; font-weight: 600; cursor: pointer; margin-top: 4px; transition: opacity .15s; }
+    .save-btn:hover { opacity: .9; }
+    /* ── TOAST ── */
+    .toast { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%) translateY(20px); background: #1a1a1a; color: #fff; font-size: 12px; padding: 9px 18px; border-radius: 20px; opacity: 0; transition: all .3s; pointer-events: none; z-index: 100; white-space: nowrap; }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  </style>
+</head>
+<body>
+<div class="app-shell" id="app">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="topbar-row">
+      <div class="brand">SHURA<span>.</span></div>
+      <button class="jenny-badge" onclick="showToast('👋 Welcome, Jenny!')">Jenny</button>
+    </div>
+    <div class="lang-bar">
+      <button class="lang-btn active" onclick="setLang('en',this)">EN</button>
+      <button class="lang-btn" onclick="setLang('zh',this)">中文</button>
+      <button class="lang-btn" onclick="setLang('vi',this)">Tiếng Việt</button>
+      <button class="lang-btn" onclick="setLang('ko',this)">한국어</button>
+    </div>
+    <div class="loc-bar">
+      <button class="loc-btn active" onclick="setLoc('Glebe',this)">Glebe</button>
+      <button class="loc-btn" onclick="setLoc('Surry Hills',this)">Surry Hills</button>
+      <button class="loc-btn" onclick="setLoc('Ultimo',this)">Ultimo</button>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- ═══ SCHEDULE ═══ -->
+    <div id="page-schedule" class="page active">
+      <div class="sec">
+        <div class="wstrip" id="weekStrip"></div>
+        <div class="sgrid">
+          <div class="sbox"><div class="sv">4</div><div class="sl" data-k="onToday">On today</div></div>
+          <div class="sbox"><div class="sv">32h</div><div class="sl" data-k="totalHrs">Total hrs</div></div>
+          <div class="sbox"><div class="sv">1</div><div class="sl" data-k="dayOff">Day off</div></div>
+        </div>
+        <div class="sec-title" data-k="todayShifts">Today's shifts</div>
+        <div class="card row"><div class="av av-pk">HL</div><div class="f1"><div class="nm">Hai Linh Tran</div><div class="sub">9:00 AM — 5:00 PM · 8h</div><div class="hint" data-k="beautician">Beautician</div></div><span class="pill p-on" data-k="onShift">On shift</span></div>
+        <div class="card row"><div class="av av-tl">XW</div><div class="f1"><div class="nm">Xiao Wei</div><div class="sub">10:00 AM — 6:00 PM · 8h</div><div class="hint" data-k="beautician">Beautician</div></div><span class="pill p-on" data-k="onShift">On shift</span></div>
+        <div class="card row"><div class="av av-pu">MK</div><div class="f1"><div class="nm">Min Jung Ko</div><div class="sub">12:00 PM — 8:00 PM · 8h</div><div class="hint" data-k="beautician">Beautician</div></div><span class="pill p-on" data-k="onShift">On shift</span></div>
+        <div class="card row"><div class="av av-am">SY</div><div class="f1"><div class="nm">Su Ying Chen</div><div class="sub" data-k="dayOffReq">Day off requested</div><div class="hint" data-k="beautician">Beautician</div></div><span class="pill p-off" data-k="dayOffLabel">Day off</span></div>
+        <div class="sec-title" style="margin-top:13px;" data-k="leaveReq">Leave Requests</div>
+        <div class="req-card" id="leaveCard1">
+          <div class="row"><div class="f1"><div class="nm">Su Ying Chen</div><div class="sub" data-k="annualLeave">Annual leave · 3 days · Apr 14–16</div></div><span class="pill p-warn" data-k="pending">Pending</span></div>
+          <div class="btn-row">
+            <button class="btn-ok" onclick="handleLeave('approve')" data-k="approve">Approve</button>
+            <button class="btn-no" onclick="handleLeave('decline')" data-k="decline">Decline</button>
+          </div>
+        </div>
+        <button class="add-btn" onclick="openOv('addShiftOv')">+ <span data-k="addShift">Add shift</span></button>
+      </div>
+    </div>
+
+    <!-- ═══ NOTICES ═══ -->
+    <div id="page-notices" class="page">
+      <div class="stabs">
+        <button class="stab active" id="st-notices" onclick="switchSub('notices-tab','st-notices')" data-k="notices">Notices</button>
+        <button class="stab" id="st-manual" onclick="switchSub('manual-tab','st-manual')" data-k="manual">Manual</button>
+      </div>
+      <div id="notices-tab" class="sec">
+        <div class="frow">
+          <button class="fb active" onclick="setFilter(this)">All</button>
+          <button class="fb" onclick="setFilter(this)" data-k="mustRead">Must Read</button>
+          <button class="fb" onclick="setFilter(this)" data-k="task">Task</button>
+          <button class="fb" onclick="setFilter(this)" data-k="event">Event</button>
+        </div>
+        <div class="bcard pinned" onclick="openOv('n1')">
+          <div class="ntop"><div class="ntitle" data-k="n1title">April Service Standards — Must Read</div><div style="display:flex;gap:4px;flex-shrink:0;"><span class="pill p-must" data-k="mustRead">Must Read</span><span class="pill p-pin" data-k="pinned">Pinned</span></div></div>
+          <div class="nmeta">Jenny · Apr 8 · All locations</div>
+          <div class="nprev" data-k="n1prev">Core service standards for all beauticians.</div>
+        </div>
+        <div class="bcard" onclick="openOv('n2')">
+          <div class="ntop"><div class="ntitle" data-k="n2title">Ultimo Academy — Beautician Discount</div><div style="display:flex;gap:4px;align-items:flex-start;"><div class="udot"></div><span class="pill p-new" data-k="newLabel">New</span></div></div>
+          <div class="nmeta">Jenny · Apr 7 · All locations</div>
+          <div class="nprev" data-k="n2prev">50% off all courses for beauticians.</div>
+        </div>
+        <div class="bcard">
+          <div class="ntop"><div class="ntitle" data-k="n3title">May Leave — Due Apr 15</div><span class="pill p-task" data-k="task">Task</span></div>
+          <div class="nmeta">Jenny · Apr 6 · All locations</div>
+        </div>
+        <div class="bcard">
+          <div class="ntop"><div class="ntitle" data-k="n4title">March Star Beautician — Hai Linh ⭐</div><span class="pill p-new" data-k="event">Event</span></div>
+          <div class="nmeta">Jenny · Apr 1 · All locations</div>
+        </div>
+        <div id="extraNotices"></div>
+        <button class="add-btn" onclick="openOv('addNoticeOv')">+ <span data-k="addNotice">New notice</span></button>
+      </div>
+      <div id="manual-tab" class="sec" style="display:none;">
+        <div class="mcat"><button class="mhdr" onclick="toggleCat(this)"><div class="mleft"><div class="mico ci-pk">💆</div><div><div style="font-size:12px;font-weight:600;color:var(--text);" data-k="catService">Client Service & Basics</div><div style="font-size:10px;color:var(--text3);" data-k="items5">5 items</div></div></div><div class="mar">▶</div></button><div class="mitems"><button class="mi" onclick="openOv('m1')"><div class="midot"></div><span style="font-size:12px;color:var(--text);flex:1;" data-k="m1">First Visit Client Process</span><span class="pill p-must" data-k="mustRead">Must Read</span></button><button class="mi" onclick="openOv('m2')"><div class="midot"></div><span style="font-size:12px;color:var(--text);flex:1;" data-k="m2">Booking Check-in Procedure</span><span class="pill p-must" data-k="mustRead">Must Read</span></button><button class="mi"><div class="midot"></div><span style="font-size:12px;color:var(--text);flex:1;" data-k="m3">Complaint Handling Guide</span></button><button class="mi"><div class="midot"></div><span style="font-size:12px;color:var(--text);flex:1;" data-k="m4">Upselling & Rebooking Scripts</span><span class="pill p-warn" data-k="updated">Updated</span></button><button class="mi"><div class="midot"></div><span style="font-size:12px;color:var(--text);flex:1;" data-k="m5">Phone & Message Response</span></button></div></div>
+        <div class="mcat"><button class="mhdr" onclick="toggleCat(this)"><div class="mleft"><div class="mico ci-tl">🌿</div><div><div style="font-size:12px;font-weight:600;color:var(--text);" data-k="catTreat">Treatment Protocols</div><div style="font-size:10px;color:var(--text3);" data-k="items6">6 items</div></div></div><div class="mar">▶</div></button><div class="mitems"><button class="mi"><div class="midot"></div><span style="font-size:12px;color:var(--text);flex:1;" data-k="t1">Facial Treatment Standard</span><span class="pill p-must" data-k="mustRead">Must Read</span></button><button class="mi"><div class="midot"></div><span style="font-size:12px;color:var(--text);flex:1;" data-k="t2">Nail Hygiene Standards</span><span class="pill p-must" data-k="mustRead">Must Read</span></button><button class="mi"><div class="midot"></div><span style="font-size:12px;color:var(--text);flex:1;" data-k="t3">Lash & Brow Guide</span></button><button class="mi"><div class="midot"></div><span style="font-size:12px;color:var(--text);flex:1;" data-k="t4">Skincare Recommendation Guide</span><span class="pill p-warn" data-k="updated">Updated</span></button><button class="mi"><div class="midot"></div><span style="font-size:12px;color:var(--text);flex:1;" data-k="t5">Allergy & Sensitive Skin</span><span class="pill p-must" data-k="mustRead">Must Read</span></button><button class="mi"><div class="midot"></div><span style="font-size:12px;color:var(--text);flex:1;" data-k="t6">Equipment Cleaning Checklist</span></button></div></div>
+        <div class="mcat"><button class="mhdr" onclick="toggleCat(this)"><div class="mleft"><div class="mico ci-pu">📋</div><div><div style="font-size:12px;font-weight:600;color:var(--text);" data-k="catOpen">Open & Close Checklist</div><div style="font-size:10px;color:var(--text3);" data-k="items3">3 items</div></div></div><div class="mar">▶</div></button><div class="mitems"><button class="mi"><div class="midot"></div><span style="font-size:12px;color:var(--text);flex:1;" data-k="o1">Opening Preparation</span><span class="pill p-must" data-k="mustRead">Must Read</span></button><button class="mi"><div class="midot"></div><span style="font-size:12px;color:var(--text);flex:1;" data-k="o2">Closing Procedure</span></button><button class="mi"><div class="midot"></div><span style="font-size:12px;color:var(--text);flex:1;" data-k="o3">Stock Check & Report</span></button></div></div>
+        <button class="add-btn">+ <span data-k="addManual">Add manual item</span></button>
+      </div>
+    </div>
+
+    <!-- ═══ EVALUATION ═══ -->
+    <div id="page-eval" class="page">
+      <div class="stabs">
+        <button class="stab active" id="st-eval" onclick="switchEval('eval-tab','st-eval')" data-k="evaluation">Evaluation</button>
+        <button class="stab" id="st-values" onclick="switchEval('values-tab','st-values')" data-k="ourValues">Our Values</button>
+        <button class="stab" id="st-leader" onclick="switchEval('leader-tab','st-leader')" data-k="leaderboard">Leaderboard</button>
+      </div>
+      <div id="eval-tab" class="sec">
+        <div class="sec-title" data-k="monthlyEval">Monthly Evaluation — April 2025</div>
+        <div class="ecard">
+          <div class="ehdr"><div class="av av-pk">HL</div><div class="f1"><div class="nm">Hai Linh Tran</div><div class="sub" data-k="beautician">Beautician</div></div><div class="scirc"><div class="snum">4.8</div><div class="smax">/5</div></div></div>
+          <div class="crow"><div class="clbl" data-k="cService">Client Service</div><div class="mstars"><span class="ms">★</span><span class="ms">★</span><span class="ms">★</span><span class="ms">★</span><span class="ms">★</span></div></div>
+          <div class="crow"><div class="clbl" data-k="cTechnique">Technique</div><div class="mstars"><span class="ms">★</span><span class="ms">★</span><span class="ms">★</span><span class="ms">★</span><span class="ms">★</span></div></div>
+          <div class="crow"><div class="clbl" data-k="cTeamwork">Teamwork</div><div class="mstars"><span class="ms">★</span><span class="ms">★</span><span class="ms">★</span><span class="ms">★</span><span class="ms e">★</span></div></div>
+          <div class="crow"><div class="clbl" data-k="cPunctuality">Punctuality</div><div class="mstars"><span class="ms">★</span><span class="ms">★</span><span class="ms">★</span><span class="ms">★</span><span class="ms">★</span></div></div>
+          <div class="crow"><div class="clbl" data-k="cAttitude">Attitude</div><div class="mstars"><span class="ms">★</span><span class="ms">★</span><span class="ms">★</span><span class="ms">★</span><span class="ms">★</span></div></div>
+        </div>
+        <div class="ecard">
+          <div class="ehdr"><div class="av av-tl">XW</div><div class="f1"><div class="nm">Xiao Wei</div><div class="sub" data-k="beautician">Beautician</div></div><div class="scirc"><div class="snum">4.6</div><div class="smax">/5</div></div></div>
+          <div class="crow"><div class="clbl" data-k="cService">Client Service</div><div class="mstars"><span class="ms">★</span><span class="ms">★</span><span class="ms">★</span><span class="ms">★</span><span class="ms">★</span></div></div>
+          <div class="crow"><div class="clbl" data-k="cTechnique">Technique</div><div class="mstars"><span class="ms">★</span><span class="ms">★</span><span class="ms">★</span><span class="ms">★</span><span class="ms">★</span></div></div>
+          <div class="crow"><div class="clbl" data-k="cTeamwork">Teamwork</div><div class="mstars"><span class="ms">★</span><span class="ms">★</span><span class="ms">★</span><span class="ms">★</span><span class="ms e">★</span></div></div>
+          <div class="crow"><div class="clbl" data-k="cPunctuality">Punctuality</div><div class="mstars"><span class="ms">★</span><span class="ms">★</span><span class="ms">★</span><span class="ms">★</span><span class="ms e">★</span></div></div>
+          <div class="crow"><div class="clbl" data-k="cAttitude">Attitude</div><div class="mstars"><span class="ms">★</span><span class="ms">★</span><span class="ms">★</span><span class="ms">★</span><span class="ms">★</span></div></div>
+        </div>
+        <div class="sec-title" data-k="achievements">Achievements</div>
+        <div class="bstrip">
+          <div class="ach"><div class="ach-ico">⭐</div><div class="ach-t" data-k="starBeautician">Star Beautician</div><div class="ach-s">Hai Linh</div></div>
+          <div class="ach"><div class="ach-ico">💬</div><div class="ach-t" data-k="clientFav">Client Fav</div><div class="ach-s">Hai Linh</div></div>
+          <div class="ach ach-locked"><div class="ach-ico">🎯</div><div class="ach-t" data-k="perfectMonth">Perfect Month</div><div class="ach-s" data-k="locked">Locked</div></div>
+        </div>
+      </div>
+      <div id="values-tab" class="sec" style="display:none;">
+        <div class="sec-title" data-k="shuraWay">The SHURA way</div>
+        <div style="background:var(--pink-light);border-radius:var(--radius);padding:13px;margin-bottom:13px;">
+          <div style="font-size:13px;font-weight:600;color:var(--pink-dark);margin-bottom:5px;" data-k="valuesTagline">"Every client leaves feeling seen, cared for, and wanting to return."</div>
+          <div style="font-size:12px;color:var(--pink-deep);line-height:1.6;" data-k="valuesDesc">Like Starbucks knows every regular's order, every SHURA beautician remembers each client's preferences, skin type, and last visit.</div>
+        </div>
+        <div class="vgrid">
+          <div class="vcard"><div style="font-size:19px;margin-bottom:5px;">👀</div><div style="font-size:12px;font-weight:600;color:var(--text);" data-k="v1title">See Every Client</div><div style="font-size:11px;color:var(--text2);margin-top:3px;line-height:1.4;" data-k="v1desc">Greet by name. Remember their history.</div></div>
+          <div class="vcard"><div style="font-size:19px;margin-bottom:5px;">💎</div><div style="font-size:12px;font-weight:600;color:var(--text);" data-k="v2title">Raise the Standard</div><div style="font-size:11px;color:var(--text2);margin-top:3px;line-height:1.4;" data-k="v2desc">Every visit better than the last.</div></div>
+          <div class="vcard"><div style="font-size:19px;margin-bottom:5px;">🤝</div><div style="font-size:12px;font-weight:600;color:var(--text);" data-k="v3title">One Team</div><div style="font-size:11px;color:var(--text2);margin-top:3px;line-height:1.4;" data-k="v3desc">A client win is everyone's win.</div></div>
+          <div class="vcard"><div style="font-size:19px;margin-bottom:5px;">🌱</div><div style="font-size:12px;font-weight:600;color:var(--text);" data-k="v4title">Always Growing</div><div style="font-size:11px;color:var(--text2);margin-top:3px;line-height:1.4;" data-k="v4desc">Bring new skills back to SHURA.</div></div>
+        </div>
+        <div class="sec-title" data-k="servicePromise">Our Service Promise</div>
+        <div class="card" style="font-size:12px;color:var(--text);line-height:2.1;">
+          <div>✦ <span data-k="sp1">Greet every client within 3 seconds</span></div>
+          <div>✦ <span data-k="sp2">Use the client's name at least twice</span></div>
+          <div>✦ <span data-k="sp3">Always offer a drink on arrival</span></div>
+          <div>✦ <span data-k="sp4">Check comfort during every treatment</span></div>
+          <div>✦ <span data-k="sp5">Give one homecare tip before they leave</span></div>
+          <div>✦ <span data-k="sp6">Walk every client to the door</span></div>
+        </div>
+      </div>
+      <div id="leader-tab" class="sec" style="display:none;">
+        <div class="sec-title" data-k="thisMonth">This month — April 2025</div>
+        <div class="card" style="padding:13px 14px;">
+          <div class="lrow"><div class="rk gold">1</div><div class="av av-pk" style="width:30px;height:30px;font-size:10px;">HL</div><div class="f1"><div class="nm">Hai Linh Tran</div><div class="hint" data-k="beautician">Beautician</div></div><div style="text-align:right;"><div style="font-size:14px;font-weight:600;color:var(--pink);">4.8</div><div class="hint">★★★★★</div></div></div>
+          <div class="lrow"><div class="rk silver">2</div><div class="av av-tl" style="width:30px;height:30px;font-size:10px;">XW</div><div class="f1"><div class="nm">Xiao Wei</div><div class="hint" data-k="beautician">Beautician</div></div><div style="text-align:right;"><div style="font-size:14px;font-weight:600;color:var(--pink);">4.6</div><div class="hint">★★★★★</div></div></div>
+          <div class="lrow"><div class="rk bronze">3</div><div class="av av-pu" style="width:30px;height:30px;font-size:10px;">MK</div><div class="f1"><div class="nm">Min Jung Ko</div><div class="hint" data-k="beautician">Beautician</div></div><div style="text-align:right;"><div style="font-size:14px;font-weight:600;color:var(--pink);">4.4</div><div class="hint">★★★★☆</div></div></div>
+          <div class="lrow"><div class="rk">4</div><div class="av av-am" style="width:30px;height:30px;font-size:10px;">SY</div><div class="f1"><div class="nm">Su Ying Chen</div><div class="hint" data-k="beautician">Beautician</div></div><div style="text-align:right;"><div style="font-size:14px;font-weight:600;color:var(--text2);">4.1</div><div class="hint">★★★★☆</div></div></div>
+        </div>
+        <div class="sec-title" style="margin-top:4px;" data-k="progress">Monthly Progress</div>
+        <div class="card">
+          <div style="margin-bottom:9px;"><div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span style="font-size:12px;color:var(--text);">Hai Linh Tran</span><span style="font-size:12px;color:var(--pink);">96%</span></div><div class="pbwrap"><div class="pbfill" style="width:96%"></div></div></div>
+          <div style="margin-bottom:9px;"><div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span style="font-size:12px;color:var(--text);">Xiao Wei</span><span style="font-size:12px;color:var(--pink);">92%</span></div><div class="pbwrap"><div class="pbfill" style="width:92%"></div></div></div>
+          <div style="margin-bottom:9px;"><div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span style="font-size:12px;color:var(--text);">Min Jung Ko</span><span style="font-size:12px;color:var(--pink);">88%</span></div><div class="pbwrap"><div class="pbfill" style="width:88%"></div></div></div>
+          <div><div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span style="font-size:12px;color:var(--text);">Su Ying Chen</span><span style="font-size:12px;color:var(--pink);">82%</span></div><div class="pbwrap"><div class="pbfill" style="width:82%"></div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ INVENTORY ═══ -->
+    <div id="page-inventory" class="page">
+      <div class="stabs">
+        <button class="stab active" id="st-inv-loc" onclick="switchInv('inv-loc-tab','st-inv-loc')" data-k="byLocation">By Location</button>
+        <button class="stab" id="st-inv-all" onclick="switchInv('inv-all-tab','st-inv-all')" data-k="allLocations">All Locations</button>
+      </div>
+      <div id="inv-loc-tab" class="sec">
+        <div class="inv-summary">
+          <div class="inv-sbox total"><div class="inv-sv" id="inv-total-count">0</div><div class="inv-sl" data-k="totalItems">Total items</div></div>
+          <div class="inv-sbox low"><div class="inv-sv" id="inv-low-count">0</div><div class="inv-sl" data-k="lowStock">Low stock</div></div>
+          <div class="inv-sbox ok"><div class="inv-sv" id="inv-ok-count">0</div><div class="inv-sl" data-k="inStock">In stock</div></div>
+        </div>
+        <div class="frow">
+          <button class="fb active" onclick="setInvFilter('all',this)" data-k="all">All</button>
+          <button class="fb" onclick="setInvFilter('skin',this)" data-k="skincare">Skincare</button>
+          <button class="fb" onclick="setInvFilter('nail',this)" data-k="nail">Nail</button>
+          <button class="fb" onclick="setInvFilter('lash',this)" data-k="lash">Lash</button>
+          <button class="fb" onclick="setInvFilter('consumable',this)" data-k="consumables">Consumables</button>
+        </div>
+        <div id="inv-list"></div>
+        <button class="add-btn" onclick="openOv('addItemOv')">+ <span data-k="addItem">Add item</span></button>
+      </div>
+      <div id="inv-all-tab" class="sec" style="display:none;">
+        <div class="sec-title" data-k="consolidatedView">Consolidated — All locations</div>
+        <div id="consolidated-list"></div>
+        <div class="sec-title" style="margin-top:4px;" data-k="urgentReorder">Urgent reorder needed</div>
+        <div id="urgent-list"></div>
+      </div>
+    </div>
+
+    <!-- ═══ CLIENTS ═══ -->
+    <div id="page-clients" class="page">
+      <div class="stabs">
+        <button class="stab active" id="st-live" onclick="switchCSAT('live-tab','st-live')" data-k="liveReviews">Live Reviews</button>
+        <button class="stab" id="st-analytics" onclick="switchCSAT('analytics-tab','st-analytics')" data-k="analytics">Analytics</button>
+        <button class="stab" id="st-retention" onclick="switchCSAT('retention-tab','st-retention')" data-k="retention">Retention</button>
+      </div>
+      <div id="live-tab" class="sec">
+        <div class="notif-banner"><div style="font-size:18px;">🔔</div><div><div style="font-size:13px;font-weight:600;color:var(--pink-dark);" data-k="newReviewAlert">New 5-star review just came in!</div><div style="font-size:12px;color:var(--pink-deep);margin-top:2px;" data-k="newReviewSub">Hai Linh — "Best nail treatment ever at SHURA!"</div></div></div>
+        <div class="sec-title" data-k="todayReviews">Today's reviews</div>
+        <div class="rvcard"><div class="rvtop"><div class="rvnm">Sarah M. → Hai Linh Tran</div><div class="rvtime">2 min · ★★★★★</div></div><div class="rvtxt">"She remembered exactly what I needed. Best nail treatment ever at SHURA!"</div><div class="rvmeta">Glebe · Nail Treatment</div></div>
+        <div class="rvcard"><div class="rvtop"><div class="rvnm">Tina L. → Xiao Wei</div><div class="rvtime">1h · ★★★★★</div></div><div class="rvtxt">"So professional and gentle. My lashes look incredible!"</div><div class="rvmeta">Glebe · Lash Treatment</div></div>
+        <div class="rvcard neutral"><div class="rvtop"><div class="rvnm">Amy K. → Min Jung Ko</div><div class="rvtime">3h · ★★★★☆</div></div><div class="rvtxt">"Great facial but waited 10 mins past my appointment time."</div><div class="rvmeta">Glebe · Facial · <span style="color:#A32D2D;" data-k="jennyOnly">Seen by Jenny only</span></div></div>
+        <div class="sec-title" style="margin-top:4px;" data-k="allReviews">All reviews</div>
+        <div class="fb-card"><div style="color:#E9A82E;font-size:12px;">★★★★★</div><div style="font-size:12px;color:var(--text);font-style:italic;margin-top:4px;line-height:1.5;" data-k="r1">"I've been coming to SHURA for 6 months. Every beautician here is exceptional."</div><div class="fb-meta"><span>Emma R. · Surry Hills</span><span>Apr 8</span></div></div>
+        <div class="fb-card"><div style="color:#E9A82E;font-size:12px;">★★★★★</div><div style="font-size:12px;color:var(--text);font-style:italic;margin-top:4px;line-height:1.5;" data-k="r2">"Su Ying is incredible. She always knows exactly what my skin needs."</div><div class="fb-meta"><span>Lisa K. · Glebe</span><span>Apr 7</span></div></div>
+      </div>
+      <div id="analytics-tab" class="sec" style="display:none;">
+        <div class="twocol">
+          <div style="background:var(--pink-light);border-radius:var(--radius);padding:13px;text-align:center;"><div style="font-size:36px;font-weight:600;color:var(--pink);line-height:1;">4.7</div><div style="font-size:11px;color:var(--pink-deep);margin-top:3px;" data-k="avgRating">Avg rating</div><div style="font-size:12px;color:var(--pink-deep);">★★★★★</div></div>
+          <div style="display:flex;flex-direction:column;gap:6px;"><div class="mstat"><div class="mval">87%</div><div class="mlbl" data-k="returnRate">Return rate</div></div><div class="mstat"><div class="mval">142</div><div class="mlbl" data-k="reviewsMonth">Reviews/month</div></div></div>
+        </div>
+        <div class="sec-title" data-k="ratingBreakdown">Rating breakdown</div>
+        <div class="barchart">
+          <div class="brow"><div class="blbl">5★</div><div class="btrack"><div class="bfill" style="width:72%;background:var(--pink);"></div></div><div class="bpct">72%</div></div>
+          <div class="brow"><div class="blbl">4★</div><div class="btrack"><div class="bfill" style="width:18%;background:var(--pink-mid);"></div></div><div class="bpct">18%</div></div>
+          <div class="brow"><div class="blbl">3★</div><div class="btrack"><div class="bfill" style="width:7%;background:#F4C0D1;"></div></div><div class="bpct">7%</div></div>
+          <div class="brow"><div class="blbl">2★</div><div class="btrack"><div class="bfill" style="width:2%;background:var(--bg3);"></div></div><div class="bpct">2%</div></div>
+          <div class="brow"><div class="blbl">1★</div><div class="btrack"><div class="bfill" style="width:1%;background:var(--bg3);"></div></div><div class="bpct">1%</div></div>
+        </div>
+        <div class="sec-title" data-k="topTags">Top feedback tags</div>
+        <div class="trow"><span class="tag g" data-k="friendly">Friendly</span><span class="tag g" data-k="relaxing">Relaxing</span><span class="tag g" data-k="professional">Professional</span><span class="tag g" data-k="clean">Clean</span><span class="tag b" data-k="waitTime">Wait time</span><span class="tag b" data-k="parking">Parking</span></div>
+      </div>
+      <div id="retention-tab" class="sec" style="display:none;">
+        <div style="background:var(--pink-light);border:0.5px solid var(--pink-mid);border-radius:var(--radius);padding:13px;margin-bottom:8px;"><div style="display:flex;justify-content:space-between;align-items:center;"><div><div style="font-size:12px;font-weight:600;color:var(--pink-dark);" data-k="returningWeek">Returning clients this week</div><div style="font-size:11px;color:var(--pink-deep);margin-top:2px;" data-k="sendReminder">Send personalised reminders</div></div><div style="font-size:28px;font-weight:600;color:var(--pink);">12</div></div></div>
+        <div class="card" style="display:flex;justify-content:space-between;align-items:center;"><div><div style="font-size:12px;font-weight:600;color:var(--text);" data-k="lapsedClients">Lapsed clients (60+ days)</div><div style="font-size:11px;color:var(--text2);margin-top:2px;" data-k="winBack">Win-back message ready</div></div><div style="font-size:28px;font-weight:600;color:var(--text);">8</div></div>
+        <div class="sec-title" data-k="squareSync">Square Appointment sync</div>
+        <div class="card row"><div style="width:34px;height:34px;background:#EAF3DE;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;">✓</div><div><div style="font-size:13px;font-weight:600;color:#3B6D11;" data-k="squareConnected">Square connected</div><div style="font-size:11px;color:var(--text2);margin-top:2px;" data-k="squareSub">Auto-syncing bookings, clients & visit history</div></div></div>
+      </div>
+    </div>
+
+    <!-- ═══ WAGES ═══ -->
+    <div id="page-wages" class="page">
+      <div class="sec">
+        <div class="owner-banner">🔒 <span data-k="wagePrivate">Visible to Jenny only</span></div>
+        <div class="sec-title" data-k="aprilWages">April 2025 — Glebe</div>
+        <div class="wage-row"><div><div class="nm">Hai Linh Tran</div><div class="sub">Beautician · 38h</div></div><div style="font-size:13px;font-weight:600;color:var(--text);">$1,140</div></div>
+        <div class="wage-row"><div><div class="nm">Xiao Wei</div><div class="sub">Beautician · 34h</div></div><div style="font-size:13px;font-weight:600;color:var(--text);">$952</div></div>
+        <div class="wage-row"><div><div class="nm">Min Jung Ko</div><div class="sub">Beautician · 30h</div></div><div style="font-size:13px;font-weight:600;color:var(--text);">$840</div></div>
+        <div class="wage-row"><div><div class="nm">Su Ying Chen</div><div class="sub">Beautician · 28h</div></div><div style="font-size:13px;font-weight:600;color:var(--text);">$714</div></div>
+        <div class="total-row"><div class="tlbl" data-k="totalMonth">Total this month</div><div class="tamt">$3,646</div></div>
+      </div>
+    </div>
+
+  </div><!-- end content -->
+
+  <!-- BOTTOM NAV -->
+  <nav class="bnav">
+    <button class="bn active" onclick="showPage('schedule',this)"><span class="bn-ico">📅</span><span class="bn-lbl" data-k="navSchedule">Schedule</span></button>
+    <button class="bn" onclick="showPage('notices',this)"><span class="bn-ico">📢</span><span class="bn-lbl" data-k="navNotices">Notices</span></button>
+    <button class="bn" onclick="showPage('eval',this)"><span class="bn-ico">⭐</span><span class="bn-lbl" data-k="navEval">Evaluation</span></button>
+    <button class="bn" onclick="showPage('inventory',this)"><span class="bn-ico">📦</span><span class="bn-lbl" data-k="navInventory">Inventory</span></button>
+    <button class="bn" onclick="showPage('clients',this)"><span class="bn-ico">💬</span><span class="bn-lbl" data-k="navClients">Clients</span></button>
+    <button class="bn" onclick="showPage('wages',this)"><span class="bn-ico">💰</span><span class="bn-lbl" data-k="navWages">Wages</span></button>
+  </nav>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
+  <!-- ═══ OVERLAYS ═══ -->
+  <div class="overlay" id="ov-n1"><div class="ov-hdr"><button class="back" onclick="closeOv('n1')" data-k="back">← Back</button><div class="ov-t" data-k="n1title">April Service Standards</div></div><div class="ov-body"><div style="display:flex;gap:5px;margin-bottom:10px;"><span class="pill p-must" data-k="mustRead">Must Read</span><span class="pill p-pin" data-k="pinned">Pinned</span></div><div class="ov-meta">Jenny · Apr 8, 2025 · All locations</div><div class="ov-content" id="ov-n1-body"></div><div class="cfbar"><div class="cftext" data-k="confirmMsg">Please confirm you have read this</div><button class="cfbtn" onclick="confirmRead(this)" data-k="confirmBtn">Confirm ✓</button></div></div></div>
+
+  <div class="overlay" id="ov-n2"><div class="ov-hdr"><button class="back" onclick="closeOv('n2')" data-k="back">← Back</button><div class="ov-t" data-k="n2title">Ultimo Academy Discount</div></div><div class="ov-body"><div style="display:flex;gap:5px;margin-bottom:10px;"><span class="pill p-new" data-k="newLabel">New</span></div><div class="ov-meta">Jenny · Apr 7, 2025 · All locations</div><div class="ov-content" id="ov-n2-body"></div></div></div>
+
+  <div class="overlay" id="ov-m1"><div class="ov-hdr"><button class="back" onclick="closeOv('m1')" data-k="back">← Back</button><div class="ov-t" data-k="m1">First Visit Client Process</div></div><div class="ov-body"><div style="display:flex;gap:5px;margin-bottom:10px;"><span class="pill p-must" data-k="mustRead">Must Read</span></div><div class="ov-meta">Service Manual · Client Service & Basics</div><div class="ov-content" id="ov-m1-body"></div><div class="cfbar"><div class="cftext" data-k="confirmMsg">Please confirm</div><button class="cfbtn" onclick="confirmRead(this)" data-k="confirmBtn">Confirm ✓</button></div></div></div>
+
+  <div class="overlay" id="ov-m2"><div class="ov-hdr"><button class="back" onclick="closeOv('m2')" data-k="back">← Back</button><div class="ov-t" data-k="m2">Booking Check-in Procedure</div></div><div class="ov-body"><div style="display:flex;gap:5px;margin-bottom:10px;"><span class="pill p-must" data-k="mustRead">Must Read</span></div><div class="ov-meta">Service Manual · Client Service & Basics</div><div class="ov-content" id="ov-m2-body"></div><div class="cfbar"><div class="cftext" data-k="confirmMsg">Please confirm</div><button class="cfbtn" onclick="confirmRead(this)" data-k="confirmBtn">Confirm ✓</button></div></div></div>
+
+  <!-- ADD SHIFT -->
+  <div class="overlay" id="addShiftOv"><div class="ov-hdr"><button class="back" onclick="closeOv('addShiftOv')" data-k="back">← Back</button><div class="ov-t" data-k="addShift">Add Shift</div></div><div class="ov-body">
+    <div class="form-field"><label class="form-lbl" data-k="beautician">Beautician</label><select class="form-input" id="shiftBeau"><option>Hai Linh Tran</option><option>Xiao Wei</option><option>Min Jung Ko</option><option>Su Ying Chen</option></select></div>
+    <div class="form-field"><label class="form-lbl" data-k="date">Date</label><input type="date" class="form-input" id="shiftDate"></div>
+    <div class="form-field"><label class="form-lbl" data-k="startTime">Start time</label><input type="time" class="form-input" id="shiftStart" value="09:00"></div>
+    <div class="form-field"><label class="form-lbl" data-k="endTime">End time</label><input type="time" class="form-input" id="shiftEnd" value="17:00"></div>
+    <button class="save-btn" onclick="saveShift()" data-k="saveShift">Save Shift</button>
+  </div></div>
+
+  <!-- ADD NOTICE -->
+  <div class="overlay" id="addNoticeOv"><div class="ov-hdr"><button class="back" onclick="closeOv('addNoticeOv')" data-k="back">← Back</button><div class="ov-t" data-k="addNotice">New Notice</div></div><div class="ov-body">
+    <div class="form-field"><label class="form-lbl" data-k="title">Title</label><input type="text" class="form-input" id="noticeTitle" placeholder="Notice title..."></div>
+    <div class="form-field"><label class="form-lbl" data-k="type">Type</label><select class="form-input" id="noticeType"><option>Must Read</option><option>Notice</option><option>Task</option><option>Event</option></select></div>
+    <div class="form-field"><label class="form-lbl" data-k="location">Location</label><select class="form-input"><option>All locations</option><option>Glebe</option><option>Surry Hills</option><option>Ultimo</option></select></div>
+    <div class="form-field"><label class="form-lbl" data-k="content">Content</label><textarea class="form-textarea" id="noticeContent" placeholder="Write your notice here..."></textarea></div>
+    <button class="save-btn" onclick="publishNotice()" data-k="publish">Publish Notice</button>
+  </div></div>
+
+  <!-- ADD INVENTORY ITEM -->
+  <div class="overlay" id="addItemOv"><div class="ov-hdr"><button class="back" onclick="closeOv('addItemOv')" data-k="back">← Back</button><div class="ov-t" data-k="addItem">Add Item</div></div><div class="ov-body">
+    <div class="form-field"><label class="form-lbl" data-k="itemName">Item name</label><input type="text" class="form-input" id="newItemName" placeholder="e.g. Hyaluronic Acid Serum"></div>
+    <div class="form-field"><label class="form-lbl" data-k="category">Category</label><select class="form-input" id="newItemCat"><option value="skin">Skincare</option><option value="nail">Nail</option><option value="lash">Lash</option><option value="consumable">Consumables</option></select></div>
+    <div class="form-field"><label class="form-lbl" data-k="currentQty">Current quantity</label><input type="number" class="form-input" id="newItemQty" value="10" min="0"></div>
+    <div class="form-field"><label class="form-lbl" data-k="minQty">Minimum (reorder alert)</label><input type="number" class="form-input" id="newItemMin" value="3" min="1"></div>
+    <div class="form-field"><label class="form-lbl" data-k="unit">Unit</label><select class="form-input" id="newItemUnit"><option>bottles</option><option>boxes</option><option>pcs</option><option>sets</option><option>rolls</option></select></div>
+    <button class="save-btn" onclick="addNewItem()" data-k="addItem">Add Item</button>
+  </div></div>
+
+  <!-- INVENTORY DETAIL -->
+  <div class="overlay" id="invDetailOv"><div class="ov-hdr"><button class="back" onclick="closeOv('invDetailOv')">← Back</button><div class="ov-t" id="invDetailTitle">Item Detail</div></div><div class="ov-body" id="invDetailBody"></div></div>
+
+</div><!-- end app-shell -->
+
+<script>
+// ═══════════════════════════════════════════════
+// INVENTORY DATA
+// ═══════════════════════════════════════════════
+const invData = {
+  Glebe: [
+    {id:1,name:'Hyaluronic Acid Serum',cat:'skin',qty:8,min:3,max:20,unit:'bottles'},
+    {id:2,name:'Cleansing Gel',cat:'skin',qty:2,min:3,max:15,unit:'bottles'},
+    {id:3,name:'Sunscreen SPF50',cat:'skin',qty:5,min:3,max:12,unit:'bottles'},
+    {id:4,name:'Gel Polish — Nude Set',cat:'nail',qty:12,min:3,max:20,unit:'sets'},
+    {id:5,name:'Nail Wipes',cat:'nail',qty:1,min:5,max:10,unit:'boxes'},
+    {id:6,name:'Lash Glue',cat:'lash',qty:4,min:2,max:10,unit:'pcs'},
+    {id:7,name:'Lash Extensions C Curl',cat:'lash',qty:6,min:3,max:15,unit:'boxes'},
+    {id:8,name:'Disposable Gloves',cat:'consumable',qty:3,min:5,max:20,unit:'boxes'},
+    {id:9,name:'Cotton Pads',cat:'consumable',qty:8,min:4,max:15,unit:'boxes'},
+    {id:10,name:'Foil Wraps',cat:'consumable',qty:2,min:3,max:10,unit:'rolls'},
+  ],
+  'Surry Hills': [
+    {id:11,name:'Hyaluronic Acid Serum',cat:'skin',qty:5,min:3,max:20,unit:'bottles'},
+    {id:12,name:'Cleansing Gel',cat:'skin',qty:7,min:3,max:15,unit:'bottles'},
+    {id:13,name:'Gel Polish — Nude Set',cat:'nail',qty:2,min:3,max:20,unit:'sets'},
+    {id:14,name:'Nail Wipes',cat:'nail',qty:8,min:5,max:10,unit:'boxes'},
+    {id:15,name:'Lash Glue',cat:'lash',qty:1,min:2,max:10,unit:'pcs'},
+    {id:16,name:'Disposable Gloves',cat:'consumable',qty:10,min:5,max:20,unit:'boxes'},
+    {id:17,name:'Cotton Pads',cat:'consumable',qty:3,min:4,max:15,unit:'boxes'},
+    {id:18,name:'Massage Oil',cat:'skin',qty:4,min:2,max:8,unit:'bottles'},
+  ],
+  Ultimo: [
+    {id:19,name:'Cleansing Gel',cat:'skin',qty:6,min:3,max:15,unit:'bottles'},
+    {id:20,name:'Lash Extensions C Curl',cat:'lash',qty:2,min:3,max:15,unit:'boxes'},
+    {id:21,name:'Lash Glue',cat:'lash',qty:5,min:2,max:10,unit:'pcs'},
+    {id:22,name:'Disposable Gloves',cat:'consumable',qty:1,min:5,max:20,unit:'boxes'},
+    {id:23,name:'Cotton Pads',cat:'consumable',qty:9,min:4,max:15,unit:'boxes'},
+    {id:24,name:'Hyaluronic Acid Serum',cat:'skin',qty:3,min:3,max:20,unit:'bottles'},
+  ]
+};
+
+let currentLoc = 'Glebe';
+let currentInvFilter = 'all';
+let nextId = 100;
+
+// ═══════════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════════
+function showPage(name, el) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.bn').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  el.classList.add('active');
+  if (name === 'inventory') { renderInv(); updateInvSummary(); renderConsolidated(); }
+  document.querySelector('.content').scrollTop = 0;
+}
+
+function setLoc(loc, el) {
+  currentLoc = loc;
+  document.querySelectorAll('.loc-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  renderInv(); updateInvSummary();
+}
+
+function selDay(el) {
+  document.querySelectorAll('.dp').forEach(d => d.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function setFilter(el) {
+  document.querySelectorAll('#notices-tab .frow .fb').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function toggleCat(el) {
+  el.nextElementSibling.classList.toggle('open');
+  el.querySelector('.mar').classList.toggle('open');
+}
+
+function switchSub(tab, activeId) {
+  ['notices-tab','manual-tab'].forEach(t => {
+    document.getElementById(t).style.display = t===tab ? 'block' : 'none';
+  });
+  ['st-notices','st-manual'].forEach(id => {
+    document.getElementById(id).classList.toggle('active', id===activeId);
+  });
+}
+
+function switchEval(tab, activeId) {
+  ['eval-tab','values-tab','leader-tab'].forEach(t => {
+    document.getElementById(t).style.display = t===tab ? 'block' : 'none';
+  });
+  ['st-eval','st-values','st-leader'].forEach(id => {
+    document.getElementById(id).classList.toggle('active', id===activeId);
+  });
+}
+
+function switchInv(tab, activeId) {
+  ['inv-loc-tab','inv-all-tab'].forEach(t => {
+    document.getElementById(t).style.display = t===tab ? 'block' : 'none';
+  });
+  ['st-inv-loc','st-inv-all'].forEach(id => {
+    document.getElementById(id).classList.toggle('active', id===activeId);
+  });
+  if (tab === 'inv-all-tab') renderConsolidated();
+}
+
+function switchCSAT(tab, activeId) {
+  ['live-tab','analytics-tab','retention-tab'].forEach(t => {
+    document.getElementById(t).style.display = t===tab ? 'block' : 'none';
+  });
+  ['st-live','st-analytics','st-retention'].forEach(id => {
+    document.getElementById(id).classList.toggle('active', id===activeId);
+  });
+}
+
+// ═══════════════════════════════════════════════
+// OVERLAYS
+// ═══════════════════════════════════════════════
+function openOv(id) {
+  applyLang();
+  const el = document.getElementById('ov-' + id) || document.getElementById(id);
+  if (el) el.classList.add('open');
+}
+
+function closeOv(id) {
+  const el = document.getElementById('ov-' + id) || document.getElementById(id);
+  if (el) el.classList.remove('open');
+}
+
+function confirmRead(btn) {
+  btn.textContent = '✓ Done';
+  btn.style.background = '#3B6D11';
+  showToast('✓ Confirmed!');
+}
+
+// ═══════════════════════════════════════════════
+// SCHEDULE ACTIONS
+// ═══════════════════════════════════════════════
+function handleLeave(action) {
+  const card = document.getElementById('leaveCard1');
+  const pill = card.querySelector('.pill');
+  const btns = card.querySelectorAll('button');
+  if (action === 'approve') {
+    pill.textContent = 'Approved'; pill.className = 'pill p-on';
+    showToast('✓ Leave approved');
+  } else {
+    pill.textContent = 'Declined'; pill.className = 'pill p-must';
+    showToast('Leave declined');
+  }
+  btns.forEach(b => b.disabled = true);
+  card.style.opacity = '.5';
+}
+
+function saveShift() {
+  const beau = document.getElementById('shiftBeau').value;
+  const date = document.getElementById('shiftDate').value;
+  const start = document.getElementById('shiftStart').value;
+  const end = document.getElementById('shiftEnd').value;
+  if (!date) { showToast('Please select a date'); return; }
+  closeOv('addShiftOv');
+  showToast(`✓ Shift saved for ${beau}`);
+}
+
+// ═══════════════════════════════════════════════
+// NOTICE ACTIONS
+// ═══════════════════════════════════════════════
+function publishNotice() {
+  const title = document.getElementById('noticeTitle').value.trim();
+  const type = document.getElementById('noticeType').value;
+  const content = document.getElementById('noticeContent').value.trim();
+  if (!title) { showToast('Please enter a title'); return; }
+  const typeClass = type==='Must Read'?'p-must':type==='Task'?'p-task':type==='Event'?'p-new':'p-pin';
+  const html = `<div class="bcard">
+    <div class="ntop"><div class="ntitle">${title}</div><span class="pill ${typeClass}">${type}</span></div>
+    <div class="nmeta">Jenny · Just now · ${currentLoc}</div>
+    ${content ? `<div class="nprev">${content}</div>` : ''}
+  </div>`;
+  document.getElementById('extraNotices').insertAdjacentHTML('afterbegin', html);
+  document.getElementById('noticeTitle').value = '';
+  document.getElementById('noticeContent').value = '';
+  closeOv('addNoticeOv');
+  showToast('✓ Notice published!');
+}
+
+// ═══════════════════════════════════════════════
+// INVENTORY
+// ═══════════════════════════════════════════════
+function catLabel(cat) {
+  return {skin:'Skincare',nail:'Nail',lash:'Lash',consumable:'Consumables'}[cat] || cat;
+}
+
+function renderInv() {
+  const items = (invData[currentLoc] || []).filter(i =>
+    currentInvFilter === 'all' || i.cat === currentInvFilter
+  );
+  const list = document.getElementById('inv-list');
+  if (!list) return;
+  if (items.length === 0) {
+    list.innerHTML = `<div class="card" style="text-align:center;color:var(--text3);font-size:12px;padding:20px;">No items in this category</div>`;
+    return;
+  }
+  list.innerHTML = items.map(item => {
+    const pct = Math.round((item.qty / item.max) * 100);
+    const isLow = item.qty <= item.min;
+    const barCls = pct > 50 ? 'inv-pb-green' : pct > 25 ? 'inv-pb-amber' : 'inv-pb-red';
+    return `<div class="inv-item${isLow?' low-stock':''}" onclick="openInvDetail(${item.id})">
+      <div class="inv-top">
+        <div><div class="inv-name">${item.name}</div><div class="inv-cat">${catLabel(item.cat)}</div></div>
+        <span class="pill ${isLow?'p-low':'p-ok'}">${isLow?'Low stock':'In stock'}</span>
+      </div>
+      <div class="inv-qty-row">
+        <div class="qty-ctrl">
+          <button class="qty-btn" onclick="event.stopPropagation();adjustQty(${item.id},-1)">−</button>
+          <span class="qty-num" id="qty-${item.id}">${item.qty}</span>
+          <span class="qty-unit">${item.unit}</span>
+          <button class="qty-btn" onclick="event.stopPropagation();adjustQty(${item.id},1)">+</button>
+        </div>
+        ${isLow ? `<button class="reorder-btn" onclick="event.stopPropagation();showToast('Reorder requested!')">Reorder</button>` : ''}
+      </div>
+      <div class="inv-pb"><div class="inv-pb-fill ${barCls}" style="width:${pct}%"></div></div>
+      <div class="inv-pb-label"><span style="font-size:10px;color:var(--text3);">Min: ${item.min}</span><span style="font-size:10px;color:var(--text3);">${item.qty}/${item.max} ${item.unit}</span></div>
+    </div>`;
+  }).join('');
+}
+
+function updateInvSummary() {
+  const items = invData[currentLoc] || [];
+  const low = items.filter(i => i.qty <= i.min).length;
+  document.getElementById('inv-total-count').textContent = items.length;
+  document.getElementById('inv-low-count').textContent = low;
+  document.getElementById('inv-ok-count').textContent = items.length - low;
+}
+
+function renderConsolidated() {
+  const allItems = {};
+  Object.entries(invData).forEach(([loc, items]) => {
+    items.forEach(item => {
+      if (!allItems[item.name]) allItems[item.name] = {name:item.name,cat:item.cat,unit:item.unit,locs:{}};
+      allItems[item.name].locs[loc] = {qty:item.qty,min:item.min,max:item.max};
+    });
+  });
+  const cl = document.getElementById('consolidated-list');
+  const ul = document.getElementById('urgent-list');
+  if (!cl || !ul) return;
+  cl.innerHTML = Object.values(allItems).slice(0,6).map(item => {
+    const rows = Object.entries(item.locs).map(([loc,d]) => {
+      const pct = Math.round((d.qty/d.max)*100);
+      const col = pct>50?'#639922':pct>25?'#BA7517':'#E24B4A';
+      const warn = d.qty<=d.min?' ⚠':'';
+      return `<div class="inv-con-row"><div class="inv-loc">${loc}</div><div class="inv-bar-wrap"><div class="inv-bar-fill" style="width:${pct}%;background:${col};"></div></div><span style="font-size:11px;color:var(--text2);width:70px;text-align:right;">${d.qty}/${d.max} ${item.unit}${warn}</span></div>`;
+    }).join('');
+    return `<div class="inv-consolidated"><div class="inv-con-hdr"><div class="inv-con-title">${item.name}</div><span class="pill" style="background:var(--bg);border:0.5px solid var(--border);color:var(--text2);">${catLabel(item.cat)}</span></div>${rows}</div>`;
+  }).join('');
+  const urgent = [];
+  Object.entries(invData).forEach(([loc,items]) => items.filter(i=>i.qty<=i.min).forEach(i=>urgent.push({...i,loc})));
+  ul.innerHTML = urgent.length === 0
+    ? `<div class="card" style="text-align:center;color:var(--text3);font-size:12px;padding:16px;">All items in stock ✓</div>`
+    : urgent.map(i=>`<div class="bcard row" style="border-color:#F7C1C1;background:#FCEBEB;">
+        <div style="width:34px;height:34px;border-radius:50%;background:#FCEBEB;border:0.5px solid #F7C1C1;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;">⚠</div>
+        <div class="f1"><div class="nm" style="color:#A32D2D;">${i.name}</div><div class="sub">${i.loc} · ${i.qty} ${i.unit} left (min ${i.min})</div></div>
+        <button class="reorder-btn" onclick="showToast('Reorder requested for ${i.loc}!')">Reorder</button>
+      </div>`).join('');
+}
+
+function adjustQty(id, delta) {
+  for (const items of Object.values(invData)) {
+    const item = items.find(i => i.id === id);
+    if (item) {
+      item.qty = Math.max(0, item.qty + delta);
+      const el = document.getElementById('qty-' + id);
+      if (el) el.textContent = item.qty;
+      updateInvSummary();
+      renderConsolidated();
+      showToast(delta > 0 ? `+1 added` : `−1 removed`);
+      break;
+    }
+  }
+}
+
+function setInvFilter(cat, el) {
+  currentInvFilter = cat;
+  document.querySelectorAll('#inv-loc-tab .frow .fb').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  renderInv();
+}
+
+function openInvDetail(id) {
+  let item = null;
+  for (const items of Object.values(invData)) {
+    item = items.find(i => i.id === id);
+    if (item) break;
+  }
+  if (!item) return;
+  const pct = Math.round((item.qty / item.max) * 100);
+  const barCls = pct>50?'inv-pb-green':pct>25?'inv-pb-amber':'inv-pb-red';
+  document.getElementById('invDetailTitle').textContent = item.name;
+  document.getElementById('invDetailBody').innerHTML = `
+    <div class="form-field"><div class="form-lbl">Category</div><div style="font-size:14px;color:var(--text);">${catLabel(item.cat)}</div></div>
+    <div class="form-field"><div class="form-lbl">Current stock</div>
+      <div style="display:flex;align-items:center;gap:12px;margin-top:6px;">
+        <button class="qty-btn" style="width:34px;height:34px;font-size:18px;" onclick="adjustQtyDetail(${item.id},-1)">−</button>
+        <span style="font-size:22px;font-weight:600;color:var(--text);" id="det-qty">${item.qty}</span>
+        <span style="font-size:13px;color:var(--text3);">${item.unit}</span>
+        <button class="qty-btn" style="width:34px;height:34px;font-size:18px;" onclick="adjustQtyDetail(${item.id},1)">+</button>
+      </div>
+    </div>
+    <div class="form-field"><div class="form-lbl">Stock level</div>
+      <div class="inv-pb" style="margin-top:6px;"><div class="inv-pb-fill ${barCls}" id="det-bar" style="width:${pct}%"></div></div>
+      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span style="font-size:11px;color:var(--text3);">Min: ${item.min}</span><span style="font-size:11px;color:var(--text3);" id="det-label">${item.qty} / ${item.max} ${item.unit}</span></div>
+    </div>
+    ${item.qty<=item.min?`<div style="background:#FCEBEB;border-radius:var(--radius);padding:11px 13px;margin-bottom:12px;font-size:12px;color:#A32D2D;font-weight:500;">⚠ Stock is low — reorder recommended</div>`:''}
+    <button class="save-btn" onclick="closeOv('invDetailOv');showToast('Changes saved!')">Save & Close</button>
+  `;
+  document.getElementById('invDetailOv').__itemId = id;
+  openOv('invDetailOv');
+}
+
+function adjustQtyDetail(id, delta) {
+  adjustQty(id, delta);
+  for (const items of Object.values(invData)) {
+    const item = items.find(i => i.id === id);
+    if (item) {
+      const pct = Math.round((item.qty / item.max) * 100);
+      const qEl = document.getElementById('det-qty');
+      const lEl = document.getElementById('det-label');
+      const bEl = document.getElementById('det-bar');
+      if (qEl) qEl.textContent = item.qty;
+      if (lEl) lEl.textContent = `${item.qty} / ${item.max} ${item.unit}`;
+      if (bEl) { bEl.style.width = pct+'%'; bEl.className = `inv-pb-fill ${pct>50?'inv-pb-green':pct>25?'inv-pb-amber':'inv-pb-red'}`; }
+      break;
+    }
+  }
+}
+
+function addNewItem() {
+  const name = document.getElementById('newItemName').value.trim();
+  if (!name) { showToast('Please enter item name'); return; }
+  const qty = parseInt(document.getElementById('newItemQty').value) || 0;
+  const min = parseInt(document.getElementById('newItemMin').value) || 3;
+  const newItem = {
+    id: nextId++,
+    name,
+    cat: document.getElementById('newItemCat').value,
+    qty,
+    min,
+    max: Math.max(qty * 2, min * 4, 20),
+    unit: document.getElementById('newItemUnit').value
+  };
+  if (!invData[currentLoc]) invData[currentLoc] = [];
+  invData[currentLoc].push(newItem);
+  document.getElementById('newItemName').value = '';
+  document.getElementById('newItemQty').value = '10';
+  closeOv('addItemOv');
+  renderInv(); updateInvSummary(); renderConsolidated();
+  showToast(`✓ ${name} added!`);
+}
+
+// ═══════════════════════════════════════════════
+// WEEK STRIP
+// ═══════════════════════════════════════════════
+function buildWeekStrip() {
+  const days = ['MON','TUE','WED','THU','FRI','SAT','SUN'];
+  const today = new Date();
+  const dayOfWeek = today.getDay(); // 0=Sun
+  const mondayOffset = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
+  const strip = document.getElementById('weekStrip');
+  if (!strip) return;
+  strip.innerHTML = days.map((d, i) => {
+    const date = new Date(today);
+    date.setDate(today.getDate() + mondayOffset + i);
+    const isToday = date.toDateString() === today.toDateString();
+    const hasShift = [1,2,3,4].includes(i);
+    return `<div class="dp${isToday?' active':''}${hasShift?' hs':''}" onclick="selDay(this)">
+      <div class="dl">${d}</div>
+      <div class="dn">${date.getDate()}</div>
+    </div>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════════════════
+// TOAST
+// ═══════════════════════════════════════════════
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+// ═══════════════════════════════════════════════
+// LANGUAGE
+// ═══════════════════════════════════════════════
+const T = {
+  en:{onToday:'On today',totalHrs:'Total hrs',dayOff:'Day off',todayShifts:"Today's shifts",onShift:'On shift',dayOffLabel:'Day off',dayOffReq:'Day off requested',addShift:'Add shift',beautician:'Beautician',leaveReq:'Leave Requests',annualLeave:'Annual leave · 3 days · Apr 14–16',pending:'Pending',approve:'Approve',decline:'Decline',all:'All',mustRead:'Must Read',task:'Task',event:'Event',pinned:'Pinned',newLabel:'New',updated:'Updated',notices:'Notices',manual:'Manual',n1title:'April Service Standards',n1prev:'Core service standards for all beauticians.',n2title:'Ultimo Academy — Discount',n2prev:'50% off all courses.',n3title:'May Leave — Due Apr 15',n4title:'March Star Beautician — Hai Linh ⭐',addNotice:'New notice',catService:'Client Service & Basics',items5:'5 items',catTreat:'Treatment Protocols',items6:'6 items',catOpen:'Open & Close Checklist',items3:'3 items',m1:'First Visit Client Process',m2:'Booking Check-in Procedure',m3:'Complaint Handling Guide',m4:'Upselling & Rebooking Scripts',m5:'Phone & Message Response',t1:'Facial Treatment Standard',t2:'Nail Hygiene Standards',t3:'Lash & Brow Guide',t4:'Skincare Recommendation Guide',t5:'Allergy & Sensitive Skin',t6:'Equipment Cleaning Checklist',o1:'Opening Preparation',o2:'Closing Procedure',o3:'Stock Check & Report',addManual:'Add manual item',evaluation:'Evaluation',ourValues:'Our Values',leaderboard:'Leaderboard',monthlyEval:'Monthly Evaluation — April 2025',cService:'Client Service',cTechnique:'Technique',cTeamwork:'Teamwork',cPunctuality:'Punctuality',cAttitude:'Attitude',achievements:'Achievements',starBeautician:'Star Beautician',clientFav:'Client Fav',perfectMonth:'Perfect Month',locked:'Locked',shuraWay:'The SHURA way',valuesTagline:'"Every client leaves feeling seen, cared for, and wanting to return."',valuesDesc:"Like Starbucks knows every regular's order, every SHURA beautician remembers each client's preferences.",v1title:'See Every Client',v1desc:'Greet by name. Remember their history.',v2title:'Raise the Standard',v2desc:'Every visit better than the last.',v3title:'One Team',v3desc:"A client win is everyone's win.",v4title:'Always Growing',v4desc:'Bring new skills back to SHURA.',servicePromise:'Our Service Promise',sp1:'Greet every client within 3 seconds',sp2:"Use the client's name at least twice",sp3:'Always offer a drink on arrival',sp4:'Check comfort during every treatment',sp5:'Give one homecare tip before they leave',sp6:'Walk every client to the door',thisMonth:'This month — April 2025',progress:'Monthly Progress',byLocation:'By Location',allLocations:'All Locations',totalItems:'Total items',lowStock:'Low stock',inStock:'In stock',skincare:'Skincare',nail:'Nail',lash:'Lash',consumables:'Consumables',addItem:'Add item',consolidatedView:'Consolidated — All locations',urgentReorder:'Urgent reorder needed',itemName:'Item name',category:'Category',currentQty:'Current quantity',minQty:'Minimum (alert)',unit:'Unit',saveShift:'Save Shift',date:'Date',startTime:'Start time',endTime:'End time',title:'Title',type:'Type',location:'Location',content:'Content',publish:'Publish',liveReviews:'Live Reviews',analytics:'Analytics',retention:'Retention',newReviewAlert:'New 5-star review just came in!',newReviewSub:'Hai Linh — "Best nail treatment ever!"',todayReviews:"Today's reviews",jennyOnly:'Seen by Jenny only',allReviews:'All reviews',r1:'"6 months at SHURA. Every beautician is exceptional."',r2:'"Su Ying always knows exactly what my skin needs."',avgRating:'Avg rating',returnRate:'Return rate',reviewsMonth:'Reviews/month',ratingBreakdown:'Rating breakdown',topTags:'Top tags',friendly:'Friendly',relaxing:'Relaxing',professional:'Professional',clean:'Clean',waitTime:'Wait time',parking:'Parking',returningWeek:'Returning clients this week',sendReminder:'Send personalised reminders',lapsedClients:'Lapsed clients (60+ days)',winBack:'Win-back message ready',squareSync:'Square Appointment sync',squareConnected:'Square connected',squareSub:'Auto-syncing bookings, clients & visit history',wagePrivate:'Visible to Jenny only',aprilWages:'April 2025 — Glebe',totalMonth:'Total this month',navSchedule:'Schedule',navNotices:'Notices',navEval:'Evaluation',navInventory:'Inventory',navClients:'Clients',navWages:'Wages',back:'← Back',confirmMsg:'Please confirm you have read this',confirmBtn:'Confirm ✓',
+  n1body:`<h3>Basic Principles</h3><ul><li>Greet within 3 seconds of entry</li><li>Use client's name at least twice</li><li>Check condition before treatment</li><li>Check comfort during treatment</li></ul><h3>Closing & Rebooking</h3><ul><li>Explain results & give 1 homecare tip</li><li>Suggest next booking naturally — never pressure</li><li>Walk client to the door</li></ul>`,
+  m1body:`<h3>Step 1 — Before Arrival</h3><ul><li>Send confirmation 1 hour before</li><li>Check allergy & preference notes</li></ul><h3>Step 2 — Welcome</h3><ul><li>Greet by name & offer shop tour</li><li>Offer water or herbal tea</li></ul><h3>Step 3 — Consultation</h3><ul><li>Check skin/nail condition & confirm price</li></ul><h3>Step 4 — Closing</h3><ul><li>Explain results & register loyalty profile</li></ul>`,
+  m2body:`<h3>Check-in Steps</h3><ul><li>Confirm appointment in Square</li><li>Check client notes for preferences</li><li>Assign treatment room & beautician</li><li>Mark arrival in the system</li></ul>`,
+  n2body:`<h3>Academy Launch Offer</h3><ul><li>All beauticians get 50% off any course</li><li>Valid April & May 2025</li><li>Book at Ultimo Academy front desk</li></ul>`
+  },
+  zh:{onToday:'今日在班',totalHrs:'总工时',dayOff:'休假',todayShifts:'今日班次',onShift:'上班中',dayOffLabel:'休假',dayOffReq:'已申请休假',addShift:'添加班次',beautician:'美容师',leaveReq:'休假申请',annualLeave:'年假·3天·4月14–16日',pending:'待审批',approve:'批准',decline:'拒绝',all:'全部',mustRead:'必读',task:'任务',event:'活动',pinned:'置顶',newLabel:'新',updated:'已更新',notices:'通知',manual:'手册',n1title:'四月服务标准',n1prev:'所有美容师必须遵守的服务标准。',n2title:'Ultimo学院 — 美容师折扣',n2prev:'全体美容师5折优惠。',n3title:'五月假期 — 截止4月15日',n4title:'三月明星美容师 — Hai Linh ⭐',addNotice:'新建通知',catService:'客户服务基础',items5:'5个项目',catTreat:'操作规程',items6:'6个项目',catOpen:'开关店检查表',items3:'3个项目',m1:'新客户接待流程',m2:'预约入店流程',m3:'投诉处理指南',m4:'追加销售话术',m5:'电话回复指南',t1:'面部护理标准',t2:'美甲卫生',t3:'睫毛眉毛指南',t4:'护肤品推荐',t5:'过敏处理',t6:'设备清洁',o1:'开店准备',o2:'关店流程',o3:'库存检查',addManual:'添加手册',evaluation:'绩效考核',ourValues:'价值观',leaderboard:'排行榜',monthlyEval:'月度考核 — 2025年4月',cService:'客户服务',cTechnique:'技术',cTeamwork:'团队协作',cPunctuality:'准时',cAttitude:'态度',achievements:'成就',starBeautician:'明星美容师',clientFav:'客户最爱',perfectMonth:'完美月份',locked:'未解锁',shuraWay:'SHURA之道',valuesTagline:'"让每位客户都想再次回来。"',valuesDesc:'就像星巴克记住常客点单，SHURA美容师记住每位客户的偏好。',v1title:'关注每位客户',v1desc:'叫出名字，记住历史。',v2title:'提升标准',v2desc:'每次到访比上次更好。',v3title:'同一个团队',v3desc:'客户成功是所有人的成功。',v4title:'持续成长',v4desc:'把新技能带回SHURA。',servicePromise:'服务承诺',sp1:'3秒内问候',sp2:'至少称呼姓名两次',sp3:'提供饮品',sp4:'确认舒适度',sp5:'给出护理建议',sp6:'送客到门口',thisMonth:'本月',progress:'月度进度',byLocation:'按地点',allLocations:'全部地点',totalItems:'总项目',lowStock:'库存不足',inStock:'库存充足',skincare:'护肤品',nail:'美甲',lash:'睫毛',consumables:'耗材',addItem:'添加项目',consolidatedView:'全部地点综合概览',urgentReorder:'紧急补货',itemName:'名称',category:'类别',currentQty:'当前数量',minQty:'最低库存',unit:'单位',saveShift:'保存班次',date:'日期',startTime:'开始',endTime:'结束',title:'标题',type:'类型',location:'地点',content:'内容',publish:'发布',liveReviews:'实时评价',analytics:'数据',retention:'留客',newReviewAlert:'收到5星好评！',newReviewSub:'Hai Linh — "最棒的体验！"',todayReviews:'今日评价',jennyOnly:'仅Jenny可见',allReviews:'全部评价',r1:'"来SHURA6个月，每位美容师都很出色。"',r2:'"Su Ying总是知道我需要什么。"',avgRating:'平均评分',returnRate:'复购率',reviewsMonth:'月评价数',ratingBreakdown:'评分分布',topTags:'热门标签',friendly:'友好',relaxing:'放松',professional:'专业',clean:'整洁',waitTime:'等待',parking:'停车',returningWeek:'本周回访',sendReminder:'发送提醒',lapsedClients:'流失客户',winBack:'赢回活动',squareSync:'Square同步',squareConnected:'Square已连接',squareSub:'自动同步预约和到访',wagePrivate:'仅Jenny可查看',aprilWages:'2025年4月',totalMonth:'本月合计',navSchedule:'班次',navNotices:'通知',navEval:'考核',navInventory:'库存',navClients:'客户',navWages:'工资',back:'← 返回',confirmMsg:'请确认已阅读',confirmBtn:'确认 ✓',
+  n1body:`<h3>基本原则</h3><ul><li>3秒内问候客户</li><li>至少称呼姓名两次</li><li>护理前检查状态</li><li>护理中确认舒适度</li></ul><h3>结束</h3><ul><li>说明效果并提供护理建议</li><li>自然建议下次预约</li><li>送客到门口</li></ul>`,
+  m1body:`<h3>第一步</h3><ul><li>提前1小时发送确认</li><li>查看过敏史</li></ul><h3>第二步</h3><ul><li>称名迎接，提供饮品</li></ul><h3>第三步</h3><ul><li>检查状态并确认价格</li></ul>`,
+  m2body:`<h3>入店步骤</h3><ul><li>在Square确认预约</li><li>查看客户备注</li><li>安排治疗室</li></ul>`,
+  n2body:`<h3>学院优惠</h3><ul><li>全体美容师5折</li><li>2025年4月5月有效</li></ul>`
+  },
+  vi:{onToday:'Đang làm',totalHrs:'Tổng giờ',dayOff:'Nghỉ',todayShifts:'Ca hôm nay',onShift:'Đang ca',dayOffLabel:'Nghỉ',dayOffReq:'Đã xin nghỉ',addShift:'Thêm ca',beautician:'Chuyên viên',leaveReq:'Đơn nghỉ',annualLeave:'Nghỉ phép 3 ngày',pending:'Chờ duyệt',approve:'Duyệt',decline:'Từ chối',all:'Tất cả',mustRead:'Bắt buộc',task:'Việc làm',event:'Sự kiện',pinned:'Ghim',newLabel:'Mới',updated:'Cập nhật',notices:'Thông báo',manual:'Hướng dẫn',n1title:'Tiêu chuẩn tháng 4',n1prev:'Tiêu chuẩn cho toàn bộ chuyên viên.',n2title:'Khai trương Academy — Ưu đãi',n2prev:'Giảm 50% tất cả khóa học.',n3title:'Nghỉ tháng 5 — Hạn 15/4',n4title:'Chuyên viên xuất sắc — Hai Linh ⭐',addNotice:'Thông báo mới',catService:'Phục vụ khách',items5:'5 mục',catTreat:'Quy trình kỹ thuật',items6:'6 mục',catOpen:'Checklist mở/đóng',items3:'3 mục',m1:'Tiếp đón khách mới',m2:'Quy trình check-in',m3:'Xử lý khiếu nại',m4:'Kịch bản bán thêm',m5:'Trả lời điện thoại',t1:'Quy trình facial',t2:'Tiêu chuẩn nail',t3:'Hướng dẫn mi',t4:'Tư vấn skincare',t5:'Da nhạy cảm',t6:'Vệ sinh thiết bị',o1:'Checklist mở cửa',o2:'Đóng cửa',o3:'Kiểm kê kho',addManual:'Thêm mục',evaluation:'Đánh giá',ourValues:'Giá trị SHURA',leaderboard:'Bảng xếp hạng',monthlyEval:'Đánh giá tháng 4/2025',cService:'Phục vụ',cTechnique:'Kỹ thuật',cTeamwork:'Đồng đội',cPunctuality:'Đúng giờ',cAttitude:'Thái độ',achievements:'Thành tích',starBeautician:'Chuyên viên xuất sắc',clientFav:'Khách yêu thích',perfectMonth:'Tháng hoàn hảo',locked:'Chưa mở',shuraWay:'Phong cách SHURA',valuesTagline:'"Mỗi khách rời đi muốn quay lại."',valuesDesc:'Như Starbucks nhớ order khách quen, SHURA nhớ sở thích từng khách.',v1title:'Quan tâm từng khách',v1desc:'Gọi tên, nhớ lịch sử.',v2title:'Nâng tiêu chuẩn',v2desc:'Mỗi lần đến tốt hơn.',v3title:'Một đội',v3desc:'Khách vui là tất cả vui.',v4title:'Luôn phát triển',v4desc:'Mang kỹ năng mới về.',servicePromise:'Cam kết',sp1:'Chào trong 3 giây',sp2:'Gọi tên 2 lần',sp3:'Mời đồ uống',sp4:'Hỏi thăm khi làm',sp5:'Tip chăm sóc tại nhà',sp6:'Tiễn ra cửa',thisMonth:'Tháng này',progress:'Tiến độ',byLocation:'Theo chi nhánh',allLocations:'Tất cả chi nhánh',totalItems:'Tổng mặt hàng',lowStock:'Sắp hết',inStock:'Còn hàng',skincare:'Skincare',nail:'Nail',lash:'Mi mắt',consumables:'Vật tư',addItem:'Thêm mặt hàng',consolidatedView:'Tổng hợp tất cả chi nhánh',urgentReorder:'Cần đặt hàng gấp',itemName:'Tên mặt hàng',category:'Danh mục',currentQty:'Số lượng hiện tại',minQty:'Tối thiểu',unit:'Đơn vị',saveShift:'Lưu ca',date:'Ngày',startTime:'Bắt đầu',endTime:'Kết thúc',title:'Tiêu đề',type:'Loại',location:'Chi nhánh',content:'Nội dung',publish:'Đăng',liveReviews:'Đánh giá trực tiếp',analytics:'Phân tích',retention:'Giữ khách',newReviewAlert:'Vừa có đánh giá 5 sao!',newReviewSub:'Hai Linh — "Tuyệt vời nhất!"',todayReviews:'Đánh giá hôm nay',jennyOnly:'Chỉ Jenny thấy',allReviews:'Tất cả',r1:'"6 tháng ở SHURA, chuyên viên nào cũng xuất sắc."',r2:'"Su Ying luôn biết da mình cần gì."',avgRating:'Đánh giá TB',returnRate:'Tỷ lệ quay lại',reviewsMonth:'Đánh giá/tháng',ratingBreakdown:'Phân bổ',topTags:'Nhận xét',friendly:'Thân thiện',relaxing:'Thư giãn',professional:'Chuyên nghiệp',clean:'Sạch sẽ',waitTime:'Chờ đợi',parking:'Đỗ xe',returningWeek:'Khách tuần này',sendReminder:'Gửi nhắc nhở',lapsedClients:'Khách lâu không đến',winBack:'Chiến dịch giành lại',squareSync:'Đồng bộ Square',squareConnected:'Đã kết nối',squareSub:'Tự động đồng bộ',wagePrivate:'Chỉ Jenny xem',aprilWages:'Tháng 4/2025',totalMonth:'Tổng tháng',navSchedule:'Lịch ca',navNotices:'Thông báo',navEval:'Đánh giá',navInventory:'Kho',navClients:'Khách',navWages:'Lương',back:'← Quay lại',confirmMsg:'Xác nhận đã đọc',confirmBtn:'Xác nhận ✓',
+  n1body:`<h3>Nguyên tắc</h3><ul><li>Chào trong 3 giây</li><li>Gọi tên 2 lần</li><li>Kiểm tra trước khi làm</li></ul>`,m1body:`<h3>Bước 1</h3><ul><li>Gửi xác nhận trước 1 tiếng</li></ul><h3>Bước 2</h3><ul><li>Chào bằng tên & mời đồ uống</li></ul>`,m2body:`<h3>Check-in</h3><ul><li>Xác nhận trên Square</li><li>Kiểm tra ghi chú khách</li></ul>`,n2body:`<h3>Ưu đãi</h3><ul><li>Giảm 50% mọi khóa học tháng 4 & 5</li></ul>`
+  },
+  ko:{onToday:'오늘 출근',totalHrs:'총 근무시간',dayOff:'휴무',todayShifts:'오늘 근무',onShift:'근무 중',dayOffLabel:'휴무',dayOffReq:'휴무 신청됨',addShift:'시프트 추가',beautician:'뷰티션',leaveReq:'휴무 신청',annualLeave:'연차·3일·4월14–16일',pending:'대기 중',approve:'승인',decline:'거절',all:'전체',mustRead:'필독',task:'업무',event:'이벤트',pinned:'고정',newLabel:'New',updated:'업데이트됨',notices:'공지사항',manual:'매뉴얼',n1title:'4월 서비스 기준',n1prev:'모든 뷰티션이 지켜야 할 서비스 기준.',n2title:'Ultimo 아카데미 — 뷰티션 할인',n2prev:'전 뷰티션 코스 50% 할인.',n3title:'5월 휴무 — 4월 15일까지',n4title:'3월 우수 뷰티션 — Hai Linh ⭐',addNotice:'공지 작성',catService:'고객 응대 & 기본',items5:'5개 항목',catTreat:'시술 프로토콜',items6:'6개 항목',catOpen:'오픈 & 클로징',items3:'3개 항목',m1:'첫 방문 고객 응대',m2:'예약 체크인 절차',m3:'컴플레인 처리',m4:'업셀링 & 재방문 스크립트',m5:'전화 & 메시지 응대',t1:'페이셜 트리트먼트',t2:'네일 위생 기준',t3:'래쉬 & 브로우 가이드',t4:'스킨케어 추천',t5:'알레르기 & 민감 피부',t6:'장비 청소 체크리스트',o1:'오픈 준비',o2:'마감 절차',o3:'재고 확인',addManual:'매뉴얼 추가',evaluation:'뷰티션 평가',ourValues:'우리의 가치관',leaderboard:'리더보드',monthlyEval:'월별 평가 — 2025년 4월',cService:'고객 응대',cTechnique:'시술 기술',cTeamwork:'팀워크',cPunctuality:'출퇴근',cAttitude:'근무 태도',achievements:'성취 배지',starBeautician:'이달의 뷰티션',clientFav:'고객 최애',perfectMonth:'퍼펙트 먼스',locked:'잠금',shuraWay:'SHURA의 방식',valuesTagline:'"모든 고객이 다시 돌아오고 싶어지게."',valuesDesc:'스타벅스가 단골을 기억하듯, SHURA의 모든 뷰티션은 고객의 선호와 피부 타입을 기억해요.',v1title:'모든 고객을 기억하기',v1desc:'이름을 불러주고 히스토리를 기억하세요.',v2title:'기준을 높이기',v2desc:'매번 방문이 지난번보다 더 좋아야 해요.',v3title:'하나의 팀',v3desc:'고객의 만족은 모두의 성공이에요.',v4title:'끊임없이 성장',v4desc:'새로운 기술을 SHURA에 가져오세요.',servicePromise:'우리의 서비스 약속',sp1:'고객 입장 3초 내 인사',sp2:'이름 최소 2번',sp3:'음료 제공',sp4:'시술 중 불편함 체크',sp5:'홈케어 팁 1가지',sp6:'문 밖까지 배웅',thisMonth:'이번 달',progress:'월별 진행도',byLocation:'지점별',allLocations:'전체 지점',totalItems:'총 항목',lowStock:'재고 부족',inStock:'재고 충분',skincare:'스킨케어',nail:'네일',lash:'래쉬',consumables:'소모품',addItem:'항목 추가',consolidatedView:'전체 지점 통합 현황',urgentReorder:'긴급 발주 필요',itemName:'항목명',category:'카테고리',currentQty:'현재 수량',minQty:'최소 수량 (알림)',unit:'단위',saveShift:'시프트 저장',date:'날짜',startTime:'시작 시간',endTime:'종료 시간',title:'제목',type:'유형',location:'지점',content:'내용',publish:'게시',liveReviews:'실시간 리뷰',analytics:'분석',retention:'재방문 관리',newReviewAlert:'5성 리뷰가 방금 들어왔어요!',newReviewSub:'Hai Linh — "SHURA 최고의 네일 시술!"',todayReviews:'오늘의 리뷰',jennyOnly:'Jenny만 볼 수 있음',allReviews:'전체 리뷰',r1:'"SHURA에 6개월째 다니고 있어요. 모든 뷰티션이 훌륭해요."',r2:'"Su Ying은 항상 내 피부에 필요한 것을 정확히 알아요."',avgRating:'평균 평점',returnRate:'재방문율',reviewsMonth:'월간 리뷰',ratingBreakdown:'평점 분포',topTags:'주요 피드백 태그',friendly:'친절함',relaxing:'편안함',professional:'전문적',clean:'청결',waitTime:'대기 시간',parking:'주차',returningWeek:'이번 주 재방문 예정',sendReminder:'리마인더 발송',lapsedClients:'60일+ 미방문',winBack:'윈백 캠페인',squareSync:'Square 연동',squareConnected:'Square 연결됨',squareSub:'예약·고객·방문 기록 자동 동기화',wagePrivate:'Jenny만 열람 가능',aprilWages:'2025년 4월 — Glebe점',totalMonth:'이번 달 합계',navSchedule:'스케줄',navNotices:'공지',navEval:'평가',navInventory:'재고',navClients:'고객',navWages:'급여',back:'← 뒤로',confirmMsg:'필독 완료 확인이 필요합니다',confirmBtn:'확인 완료 ✓',
+  n1body:`<h3>기본 응대 원칙</h3><ul><li>입장 3초 내 인사</li><li>이름 최소 2회</li><li>시술 전 상태 확인</li><li>시술 중 불편함 체크</li></ul><h3>마무리 & 재방문</h3><ul><li>결과 설명 & 홈케어 팁</li><li>자연스럽게 다음 예약 제안</li><li>문 밖까지 배웅</li></ul>`,
+  m1body:`<h3>Step 1 — 도착 전</h3><ul><li>1시간 전 확인 문자</li><li>알레르기 확인</li></ul><h3>Step 2 — 맞이하기</h3><ul><li>이름 부르며 환영 & 음료 제공</li></ul><h3>Step 3</h3><ul><li>상태 체크 & 가격 확인</li></ul>`,
+  m2body:`<h3>체크인 절차</h3><ul><li>Square에서 예약 확인</li><li>고객 메모 확인</li><li>담당 뷰티션 배정</li></ul>`,
+  n2body:`<h3>아카데미 오픈 혜택</h3><ul><li>전 뷰티션 50% 할인</li><li>4월, 5월 적용</li><li>Ultimo 아카데미 프론트 데스크에서 예약</li></ul>`
+  }
+};
+
+let lang = 'en';
+function setLang(l, el) {
+  lang = l;
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  applyLang();
+}
+
+function applyLang() {
+  const t = T[lang];
+  if (!t) return;
+  document.querySelectorAll('[data-k]').forEach(el => {
+    const k = el.getAttribute('data-k');
+    if (t[k] !== undefined) el.textContent = t[k];
+  });
+  ['n1','n2','m1','m2'].forEach(id => {
+    const el = document.getElementById('ov-'+id+'-body');
+    if (el && t[id+'body']) el.innerHTML = t[id+'body'];
+  });
+}
+
+// ═══════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', () => {
+  buildWeekStrip();
+  renderInv();
+  updateInvSummary();
+  renderConsolidated();
+  applyLang();
+  // Set today's date in shift form
+  const today = new Date().toISOString().split('T')[0];
+  const shiftDateEl = document.getElementById('shiftDate');
+  if (shiftDateEl) shiftDateEl.value = today;
+});
+</script>
+</body>
+</html>
