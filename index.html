@@ -319,7 +319,7 @@ html,body{height:100%;overflow:hidden;font-family:-apple-system,BlinkMacSystemFo
 .av-picker{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;}
 
 /* PIN LOGIN */
-.pin-screen{position:fixed;top:0;left:0;right:0;bottom:0;background:var(--sage-dark);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;padding:24px;overflow-y:auto;}
+.pin-screen{position:fixed;top:0;left:0;right:0;bottom:0;background:var(--sage-dark);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;padding:24px;overflow-y:auto;pointer-events:auto;}
 .pin-logo{font-size:28px;font-weight:600;letter-spacing:5px;color:#fff;margin-bottom:6px;}
 .pin-logo span{color:var(--sage-mid);}
 .pin-subtitle{font-size:13px;color:rgba(255,255,255,0.5);margin-bottom:40px;}
@@ -332,8 +332,8 @@ html,body{height:100%;overflow:hidden;font-family:-apple-system,BlinkMacSystemFo
 .pin-dot{width:14px;height:14px;border-radius:50%;background:rgba(255,255,255,0.2);transition:all .2s;}
 .pin-dot.filled{background:#fff;}
 .pin-pad{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;width:100%;max-width:280px;}
-.pin-key{height:64px;border-radius:var(--r);border:0.5px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.08);color:#fff;font-size:22px;font-weight:500;cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;}
-.pin-key:hover,.pin-key:active{background:rgba(255,255,255,0.18);}
+.pin-key{height:64px;border-radius:var(--r);border:0.5px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.08);color:#fff;font-size:22px;font-weight:500;cursor:pointer;transition:background .15s;display:flex;align-items:center;justify-content:center;pointer-events:auto;-webkit-tap-highlight-color:rgba(255,255,255,0.1);user-select:none;-webkit-user-select:none;}
+.pin-key:hover{background:rgba(255,255,255,0.18);}.pin-key:active{background:rgba(255,255,255,0.3);transform:scale(0.95);}
 .pin-key.del{font-size:18px;}
 .pin-key.empty{background:transparent;border:none;cursor:default;}
 .pin-error{font-size:13px;color:#FF6B6B;margin-top:16px;opacity:0;transition:opacity .3s;}
@@ -1482,6 +1482,27 @@ function buildPinScreen() {
   var list = document.getElementById('pinUserList');
   if (!list) return;
 
+  // Attach event listeners to pin pad buttons
+  var pad = document.getElementById('pinPad');
+  if (pad) {
+    pad.addEventListener('click', function(e) {
+      var btn = e.target.closest('[data-pin]');
+      if (!btn) return;
+      var val = btn.getAttribute('data-pin');
+      if (val === 'del') { pinDel(); }
+      else { pinKey(val); }
+    });
+    // Also handle touchend for mobile
+    pad.addEventListener('touchend', function(e) {
+      e.preventDefault();
+      var btn = e.target.closest('[data-pin]');
+      if (!btn) return;
+      var val = btn.getAttribute('data-pin');
+      if (val === 'del') { pinDel(); }
+      else { pinKey(val); }
+    });
+  }
+
   // Jenny button first
   var html = '<button class="pin-user-btn" id="puser-jenny" onclick="selectPinUser('jenny')">Jenny</button>';
 
@@ -1633,10 +1654,8 @@ function doLogout() {
   document.querySelectorAll('.bn').forEach(function(b){ b.style.display = ''; });
 }
 
-// Add PIN field to Settings staff cards
-var _origRenderStaffSettings = renderStaffSettings;
-renderStaffSettings = function() {
-  _origRenderStaffSettings();
+// Add PIN field to Settings staff cards - called separately
+function addPinFieldsToSettings() {
   // Add PIN field to each staff card
   staffList.forEach(function(s) {
     var card = document.getElementById('secard-' + s.id);
@@ -1675,6 +1694,13 @@ function updateStaffPin(id, val) {
   if (s) s.pin = val;
 }
 
+// Call addPinFieldsToSettings after renderStaffSettings
+var _baseRenderStaff = renderStaffSettings;
+renderStaffSettings = function() {
+  _baseRenderStaff();
+  setTimeout(addPinFieldsToSettings, 50);
+};
+
 </script>
 
 <!-- PIN LOGIN SCREEN -->
@@ -1694,19 +1720,19 @@ function updateStaffPin(id, val) {
     <div class="pin-dot" id="d3"></div>
   </div>
 
-  <div class="pin-pad">
-    <button class="pin-key" onclick="pinKey('1')">1</button>
-    <button class="pin-key" onclick="pinKey('2')">2</button>
-    <button class="pin-key" onclick="pinKey('3')">3</button>
-    <button class="pin-key" onclick="pinKey('4')">4</button>
-    <button class="pin-key" onclick="pinKey('5')">5</button>
-    <button class="pin-key" onclick="pinKey('6')">6</button>
-    <button class="pin-key" onclick="pinKey('7')">7</button>
-    <button class="pin-key" onclick="pinKey('8')">8</button>
-    <button class="pin-key" onclick="pinKey('9')">9</button>
-    <button class="pin-key empty"></button>
-    <button class="pin-key" onclick="pinKey('0')">0</button>
-    <button class="pin-key del" onclick="pinDel()">⌫</button>
+  <div class="pin-pad" id="pinPad">
+    <button class="pin-key" data-pin="1">1</button>
+    <button class="pin-key" data-pin="2">2</button>
+    <button class="pin-key" data-pin="3">3</button>
+    <button class="pin-key" data-pin="4">4</button>
+    <button class="pin-key" data-pin="5">5</button>
+    <button class="pin-key" data-pin="6">6</button>
+    <button class="pin-key" data-pin="7">7</button>
+    <button class="pin-key" data-pin="8">8</button>
+    <button class="pin-key" data-pin="9">9</button>
+    <button class="pin-key empty" style="pointer-events:none;background:transparent;border:none;"></button>
+    <button class="pin-key" data-pin="0">0</button>
+    <button class="pin-key del" data-pin="del">⌫</button>
   </div>
 
   <div class="pin-error" id="pinError">Incorrect PIN. Please try again.</div>
