@@ -319,7 +319,7 @@ html,body{height:100%;overflow:hidden;font-family:-apple-system,BlinkMacSystemFo
 .av-picker{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;}
 
 /* PIN LOGIN */
-.pin-screen{position:fixed;inset:0;background:var(--sage-dark);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:200;padding:24px;}
+.pin-screen{position:fixed;top:0;left:0;right:0;bottom:0;background:var(--sage-dark);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;padding:24px;overflow-y:auto;}
 .pin-logo{font-size:28px;font-weight:600;letter-spacing:5px;color:#fff;margin-bottom:6px;}
 .pin-logo span{color:var(--sage-mid);}
 .pin-subtitle{font-size:13px;color:rgba(255,255,255,0.5);margin-bottom:40px;}
@@ -623,41 +623,6 @@ html,body{height:100%;overflow:hidden;font-family:-apple-system,BlinkMacSystemFo
 <div class="overlay" id="invDetailOv"><div class="ov-hdr"><button class="back-btn" onclick="closeOv('invDetailOv')">← Back</button><div class="ov-t" id="invDetailTitle">Item Detail</div></div><div class="ov-body" id="invDetailBody"></div></div>
 
 
-<!-- PIN LOGIN SCREEN -->
-<div class="pin-screen" id="pinScreen">
-  <div class="pin-logo">SHURA<span>.</span></div>
-  <div class="pin-subtitle">Staff Portal</div>
-
-  <div class="pin-user-select">
-    <div class="pin-user-lbl">Who are you?</div>
-    <div class="pin-users" id="pinUserList"></div>
-  </div>
-
-  <div class="pin-dots" id="pinDots">
-    <div class="pin-dot" id="d0"></div>
-    <div class="pin-dot" id="d1"></div>
-    <div class="pin-dot" id="d2"></div>
-    <div class="pin-dot" id="d3"></div>
-  </div>
-
-  <div class="pin-pad">
-    <button class="pin-key" onclick="pinKey('1')">1</button>
-    <button class="pin-key" onclick="pinKey('2')">2</button>
-    <button class="pin-key" onclick="pinKey('3')">3</button>
-    <button class="pin-key" onclick="pinKey('4')">4</button>
-    <button class="pin-key" onclick="pinKey('5')">5</button>
-    <button class="pin-key" onclick="pinKey('6')">6</button>
-    <button class="pin-key" onclick="pinKey('7')">7</button>
-    <button class="pin-key" onclick="pinKey('8')">8</button>
-    <button class="pin-key" onclick="pinKey('9')">9</button>
-    <button class="pin-key empty"></button>
-    <button class="pin-key" onclick="pinKey('0')">0</button>
-    <button class="pin-key del" onclick="pinDel()">⌫</button>
-  </div>
-
-  <div class="pin-error" id="pinError">Incorrect PIN. Please try again.</div>
-  <div class="pin-welcome" id="pinWelcome"></div>
-</div>
 </div><!-- end shell -->
 
 <script>
@@ -1711,5 +1676,41 @@ function updateStaffPin(id, val) {
 }
 
 </script>
+
+<!-- PIN LOGIN SCREEN -->
+<div class="pin-screen" id="pinScreen">
+  <div class="pin-logo">SHURA<span>.</span></div>
+  <div class="pin-subtitle">Staff Portal</div>
+
+  <div class="pin-user-select">
+    <div class="pin-user-lbl">Who are you?</div>
+    <div class="pin-users" id="pinUserList"></div>
+  </div>
+
+  <div class="pin-dots" id="pinDots">
+    <div class="pin-dot" id="d0"></div>
+    <div class="pin-dot" id="d1"></div>
+    <div class="pin-dot" id="d2"></div>
+    <div class="pin-dot" id="d3"></div>
+  </div>
+
+  <div class="pin-pad">
+    <button class="pin-key" onclick="pinKey('1')">1</button>
+    <button class="pin-key" onclick="pinKey('2')">2</button>
+    <button class="pin-key" onclick="pinKey('3')">3</button>
+    <button class="pin-key" onclick="pinKey('4')">4</button>
+    <button class="pin-key" onclick="pinKey('5')">5</button>
+    <button class="pin-key" onclick="pinKey('6')">6</button>
+    <button class="pin-key" onclick="pinKey('7')">7</button>
+    <button class="pin-key" onclick="pinKey('8')">8</button>
+    <button class="pin-key" onclick="pinKey('9')">9</button>
+    <button class="pin-key empty"></button>
+    <button class="pin-key" onclick="pinKey('0')">0</button>
+    <button class="pin-key del" onclick="pinDel()">⌫</button>
+  </div>
+
+  <div class="pin-error" id="pinError">Incorrect PIN. Please try again.</div>
+  <div class="pin-welcome" id="pinWelcome"></div>
+</div>
 </body>
 </html>
