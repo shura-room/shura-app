@@ -1482,36 +1482,43 @@ function buildPinScreen() {
   var list = document.getElementById('pinUserList');
   if (!list) return;
 
-  // Attach event listeners to pin pad buttons
+  // Attach event listeners to pin pad - use data attributes, no onclick
   var pad = document.getElementById('pinPad');
-  if (pad) {
-    pad.addEventListener('click', function(e) {
+  if (pad && !pad._hasListener) {
+    pad._hasListener = true;
+    function handlePinInput(e) {
+      if (e.type === 'touchend') e.preventDefault();
       var btn = e.target.closest('[data-pin]');
       if (!btn) return;
       var val = btn.getAttribute('data-pin');
       if (val === 'del') { pinDel(); }
       else { pinKey(val); }
-    });
-    // Also handle touchend for mobile
-    pad.addEventListener('touchend', function(e) {
-      e.preventDefault();
-      var btn = e.target.closest('[data-pin]');
-      if (!btn) return;
-      var val = btn.getAttribute('data-pin');
-      if (val === 'del') { pinDel(); }
-      else { pinKey(val); }
-    });
+    }
+    pad.addEventListener('click', handlePinInput);
+    pad.addEventListener('touchend', handlePinInput);
   }
 
-  // Jenny button first
-  var html = '<button class="pin-user-btn" id="puser-jenny" onclick="selectPinUser(\'jenny\')">Jenny</button>';
+  // Build user buttons using DOM (no innerHTML with quotes)
+  list.innerHTML = '';
 
-  // Staff buttons
+  var jennyBtn = document.createElement('button');
+  jennyBtn.className = 'pin-user-btn';
+  jennyBtn.id = 'puser-jenny';
+  jennyBtn.textContent = 'Jenny';
+  jennyBtn.addEventListener('click', function() { selectPinUser('jenny'); });
+  jennyBtn.addEventListener('touchend', function(e) { e.preventDefault(); selectPinUser('jenny'); });
+  list.appendChild(jennyBtn);
+
   staffList.forEach(function(s) {
-    html += '<button class="pin-user-btn" id="puser-' + s.id + '" onclick="selectPinUser(' + s.id + ')">' + s.name.split(' ')[0] + '</button>';
+    var btn = document.createElement('button');
+    btn.className = 'pin-user-btn';
+    btn.id = 'puser-' + s.id;
+    btn.textContent = s.name.split(' ')[0];
+    var sid = s.id;
+    btn.addEventListener('click', function() { selectPinUser(sid); });
+    btn.addEventListener('touchend', function(e) { e.preventDefault(); selectPinUser(sid); });
+    list.appendChild(btn);
   });
-
-  list.innerHTML = html;
 }
 
 function selectPinUser(userId) {
