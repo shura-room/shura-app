@@ -1305,12 +1305,12 @@ function renderStaffSettings() {
   if (!list) return;
   list.innerHTML = staffList.map(function(s) {
     var avOpts = Object.keys(avStyles).map(function(av) {
-      return '<div class="staff-av-pick' + (s.av===av?' selected':'') + '" style="' + avStyles[av] + '" onclick="changeAv(' + s.id + ','' + av + '')">' + (s.init||'?') + '</div>';
+      return '<div class="staff-av-pick' + (s.av===av?' selected':'') + '" style="' + avStyles[av] + '" onclick="changeAv(' + s.id + ',\'' + av + '\')">' + (s.init||'?') + '</div>';
     }).join('');
 
     var locBtns = allLocs.map(function(loc) {
       var active = s.locs && s.locs.indexOf(loc) > -1;
-      return '<button class="loc-toggle-btn' + (active?' active':'') + '" onclick="toggleLoc(' + s.id + ','' + loc + '')">' + loc + '</button>';
+      return '<button class="loc-toggle-btn' + (active?' active':'') + '" onclick="toggleLoc(' + s.id + ',\'' + loc + '\')">' + loc + '</button>';
     }).join('');
 
     var bdayVal = s.bday ? ('2025-' + s.bday) : '';
@@ -1324,10 +1324,10 @@ function renderStaffSettings() {
       '</div>' +
       '<div class="av-picker" id="avpicker-' + s.id + '" style="display:none;">' + avOpts + '</div>' +
       '<div class="staff-fields">' +
-        '<div class="staff-field"><div class="staff-field-lbl">Full name</div><input type="text" value="' + s.name + '" id="sf-name-' + s.id + '" oninput="updateStaffField(' + s.id + ','name',this.value)"></div>' +
-        '<div class="staff-field"><div class="staff-field-lbl">Role / Title</div><input type="text" value="' + (s.role||'Beautician') + '" id="sf-role-' + s.id + '" oninput="updateStaffField(' + s.id + ','role',this.value)"></div>' +
-        '<div class="staff-field"><div class="staff-field-lbl">Hourly rate ($)</div><input type="number" value="' + s.rate + '" step="0.5" min="0" id="sf-rate-' + s.id + '" oninput="updateStaffField(' + s.id + ','rate',parseFloat(this.value)||0)"></div>' +
-        '<div class="staff-field"><div class="staff-field-lbl">Avg hours/week</div><input type="number" value="' + s.hours + '" step="0.5" min="0" id="sf-hours-' + s.id + '" oninput="updateStaffField(' + s.id + ','hours',parseFloat(this.value)||0)"></div>' +
+        '<div class="staff-field"><div class="staff-field-lbl">Full name</div><input type="text" value="' + s.name + '" id="sf-name-' + s.id + '" oninput="updateStaffField(' + s.id + ',\'name\',this.value)"></div>' +
+        '<div class="staff-field"><div class="staff-field-lbl">Role / Title</div><input type="text" value="' + (s.role||'Beautician') + '" id="sf-role-' + s.id + '" oninput="updateStaffField(' + s.id + ',\'role\',this.value)"></div>' +
+        '<div class="staff-field"><div class="staff-field-lbl">Hourly rate ($)</div><input type="number" value="' + s.rate + '" step="0.5" min="0" id="sf-rate-' + s.id + '" oninput="updateStaffField(' + s.id + ',\'rate\',parseFloat(this.value)||0)"></div>' +
+        '<div class="staff-field"><div class="staff-field-lbl">Avg hours/week</div><input type="number" value="' + s.hours + '" step="0.5" min="0" id="sf-hours-' + s.id + '" oninput="updateStaffField(' + s.id + ',\'hours\',parseFloat(this.value)||0)"></div>' +
       '</div>' +
       '<div class="staff-field-full"><div class="staff-field-lbl">Birthday (optional)</div><input type="date" value="' + bdayVal + '" id="sf-bday-' + s.id + '" oninput="updateBday(' + s.id + ',this.value)"></div>' +
       '<div class="staff-field-full"><div class="staff-field-lbl">Location(s)</div><div class="loc-toggle" id="loctoggle-' + s.id + '">' + locBtns + '</div></div>' +
