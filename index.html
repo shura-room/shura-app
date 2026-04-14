@@ -625,6 +625,38 @@ html,body{height:100%;overflow:hidden;font-family:-apple-system,BlinkMacSystemFo
 
 </div><!-- end shell -->
 
+<!-- PIN LOGIN SCREEN -->
+<div class="pin-screen" id="pinScreen">
+  <div class="pin-logo">SHURA<span>.</span></div>
+  <div class="pin-subtitle">Staff Portal</div>
+  <div class="pin-user-select">
+    <div class="pin-user-lbl">Who are you?</div>
+    <div class="pin-users" id="pinUserList"></div>
+  </div>
+  <div class="pin-dots" id="pinDots">
+    <div class="pin-dot" id="d0"></div>
+    <div class="pin-dot" id="d1"></div>
+    <div class="pin-dot" id="d2"></div>
+    <div class="pin-dot" id="d3"></div>
+  </div>
+  <div class="pin-pad" id="pinPad">
+    <button class="pin-key" data-pin="1">1</button>
+    <button class="pin-key" data-pin="2">2</button>
+    <button class="pin-key" data-pin="3">3</button>
+    <button class="pin-key" data-pin="4">4</button>
+    <button class="pin-key" data-pin="5">5</button>
+    <button class="pin-key" data-pin="6">6</button>
+    <button class="pin-key" data-pin="7">7</button>
+    <button class="pin-key" data-pin="8">8</button>
+    <button class="pin-key" data-pin="9">9</button>
+    <button class="pin-key" style="background:transparent;border:none;pointer-events:none;"></button>
+    <button class="pin-key" data-pin="0">0</button>
+    <button class="pin-key del" data-pin="del">⌫</button>
+  </div>
+  <div class="pin-error" id="pinError">Incorrect PIN. Please try again.</div>
+  <div class="pin-welcome" id="pinWelcome"></div>
+</div>
+
 <script>
 // ═══════════════════════════════════════════
 // DATA
@@ -1264,6 +1296,7 @@ document.addEventListener('DOMContentLoaded',function(){
   var sd=document.getElementById('shiftDate');if(sd)sd.value=today;
   var ed=document.getElementById('eventDate');if(ed)ed.value=today;
   var bd=document.getElementById('bdayDate');if(bd)bd.value=today;
+  buildPinScreen();
 });
 
 // ═══════════════════════════════════════════
@@ -1706,44 +1739,8 @@ renderStaffSettings = function() {
   setTimeout(addPinFieldsToSettings, 50);
 };
 
-// Init PIN screen after all data is loaded
-buildPinScreen();
+
 </script>
 
-<!-- PIN LOGIN SCREEN -->
-<div class="pin-screen" id="pinScreen">
-  <div class="pin-logo">SHURA<span>.</span></div>
-  <div class="pin-subtitle">Staff Portal</div>
-
-  <div class="pin-user-select">
-    <div class="pin-user-lbl">Who are you?</div>
-    <div class="pin-users" id="pinUserList"></div>
-  </div>
-
-  <div class="pin-dots" id="pinDots">
-    <div class="pin-dot" id="d0"></div>
-    <div class="pin-dot" id="d1"></div>
-    <div class="pin-dot" id="d2"></div>
-    <div class="pin-dot" id="d3"></div>
-  </div>
-
-  <div class="pin-pad" id="pinPad">
-    <button class="pin-key" data-pin="1">1</button>
-    <button class="pin-key" data-pin="2">2</button>
-    <button class="pin-key" data-pin="3">3</button>
-    <button class="pin-key" data-pin="4">4</button>
-    <button class="pin-key" data-pin="5">5</button>
-    <button class="pin-key" data-pin="6">6</button>
-    <button class="pin-key" data-pin="7">7</button>
-    <button class="pin-key" data-pin="8">8</button>
-    <button class="pin-key" data-pin="9">9</button>
-    <button class="pin-key" style="background:transparent;border:none;pointer-events:none;"></button>
-    <button class="pin-key" data-pin="0">0</button>
-    <button class="pin-key del" data-pin="del">⌫</button>
-  </div>
-
-  <div class="pin-error" id="pinError">Incorrect PIN. Please try again.</div>
-  <div class="pin-welcome" id="pinWelcome"></div>
-</div>
 </body>
 </html>
