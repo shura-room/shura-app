@@ -293,6 +293,56 @@ html,body{height:100%;overflow:hidden;font-family:-apple-system,BlinkMacSystemFo
 /* TOAST */
 .toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:#1a1a1a;color:#fff;font-size:12px;padding:9px 18px;border-radius:20px;opacity:0;transition:all .3s;pointer-events:none;z-index:100;white-space:nowrap;}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* SETTINGS */
+.settings-section{margin-bottom:18px;}
+.settings-hdr{font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px;padding:0 2px;}
+.staff-edit-card{border:0.5px solid var(--border);border-radius:var(--r);padding:13px 14px;margin-bottom:8px;background:var(--bg);}
+.staff-edit-top{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.staff-av-pick{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;cursor:pointer;flex-shrink:0;border:2px solid transparent;transition:all .15s;}
+.staff-av-pick.selected{border-color:var(--sage);}
+.staff-fields{display:grid;grid-template-columns:1fr 1fr;gap:7px;}
+.staff-field{background:var(--bg2);border-radius:var(--rs);padding:9px 11px;}
+.staff-field-lbl{font-size:10px;color:var(--text3);margin-bottom:4px;}
+.staff-field input,.staff-field select{width:100%;background:none;border:none;font-size:13px;font-weight:500;color:var(--text);font-family:inherit;padding:0;}
+.staff-field input:focus,.staff-field select:focus{outline:none;}
+.staff-field-full{background:var(--bg2);border-radius:var(--rs);padding:9px 11px;margin-top:7px;}
+.del-staff-btn{font-size:11px;padding:5px 10px;border-radius:20px;border:none;background:#FCEBEB;color:#A32D2D;cursor:pointer;margin-top:8px;font-weight:500;}
+.del-staff-btn:hover{background:#f5baba;}
+.add-staff-card{border:0.5px dashed var(--border2);border-radius:var(--r);padding:14px;margin-bottom:8px;text-align:center;cursor:pointer;transition:background .15s;}
+.add-staff-card:hover{background:var(--bg2);}
+.loc-toggle{display:flex;gap:5px;flex-wrap:wrap;margin-top:5px;}
+.loc-toggle-btn{font-size:11px;padding:4px 10px;border-radius:20px;border:0.5px solid var(--border);background:var(--bg2);color:var(--text2);cursor:pointer;transition:all .15s;}
+.loc-toggle-btn.active{background:var(--sage-light);color:var(--sage-dark);border-color:var(--sage-mid);}
+.save-settings-btn{width:100%;padding:12px;border-radius:var(--r);border:none;background:var(--sage);color:#fff;font-size:13px;font-weight:600;cursor:pointer;margin-top:4px;}
+.save-settings-btn:hover{opacity:.9;}
+.av-picker{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;}
+
+/* PIN LOGIN */
+.pin-screen{position:fixed;inset:0;background:var(--sage-dark);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:200;padding:24px;}
+.pin-logo{font-size:28px;font-weight:600;letter-spacing:5px;color:#fff;margin-bottom:6px;}
+.pin-logo span{color:var(--sage-mid);}
+.pin-subtitle{font-size:13px;color:rgba(255,255,255,0.5);margin-bottom:40px;}
+.pin-user-select{width:100%;max-width:320px;margin-bottom:28px;}
+.pin-user-lbl{font-size:11px;color:rgba(255,255,255,0.5);margin-bottom:10px;text-align:center;text-transform:uppercase;letter-spacing:.6px;}
+.pin-users{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;}
+.pin-user-btn{padding:8px 16px;border-radius:20px;border:0.5px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.08);color:#fff;font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;}
+.pin-user-btn.selected{background:var(--sage);border-color:var(--sage);}
+.pin-dots{display:flex;gap:12px;margin-bottom:28px;height:16px;align-items:center;}
+.pin-dot{width:14px;height:14px;border-radius:50%;background:rgba(255,255,255,0.2);transition:all .2s;}
+.pin-dot.filled{background:#fff;}
+.pin-pad{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;width:100%;max-width:280px;}
+.pin-key{height:64px;border-radius:var(--r);border:0.5px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.08);color:#fff;font-size:22px;font-weight:500;cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;}
+.pin-key:hover,.pin-key:active{background:rgba(255,255,255,0.18);}
+.pin-key.del{font-size:18px;}
+.pin-key.empty{background:transparent;border:none;cursor:default;}
+.pin-error{font-size:13px;color:#FF6B6B;margin-top:16px;opacity:0;transition:opacity .3s;}
+.pin-error.show{opacity:1;}
+.pin-welcome{font-size:13px;color:rgba(255,255,255,0.6);margin-top:16px;}
+/* USER BADGE when logged in */
+.user-badge-wrap{display:flex;align-items:center;gap:6px;}
+.user-badge-name{font-size:11px;color:var(--sage-dark);font-weight:600;}
+.logout-btn{font-size:10px;color:var(--sage-deep);cursor:pointer;background:none;border:none;padding:0;margin-left:2px;text-decoration:underline;}
 </style>
 </head>
 <body>
@@ -302,7 +352,7 @@ html,body{height:100%;overflow:hidden;font-family:-apple-system,BlinkMacSystemFo
 <div class="topbar">
   <div class="topbar-row">
     <div class="brand">SHURA<span>.</span></div>
-    <button class="jenny-btn" onclick="showToast('👋 Welcome, Jenny!')">Jenny</button>
+    <div class="user-badge-wrap"><div id="topUserBadge" style="font-size:11px;background:#B8DDCA;color:var(--sage-dark);padding:4px 11px;border-radius:20px;font-weight:600;">Jenny</div><button class="logout-btn" onclick="doLogout()">logout</button></div>
   </div>
   <div class="lang-bar">
     <button class="lbtn active" onclick="setLang('en',this)">EN</button>
@@ -324,15 +374,12 @@ html,body{height:100%;overflow:hidden;font-family:-apple-system,BlinkMacSystemFo
   <div class="sec">
     <div class="wstrip" id="weekStrip"></div>
     <div class="sgrid">
-      <div class="sbox"><div class="sv">4</div><div class="sl" data-k="onToday">On today</div></div>
-      <div class="sbox"><div class="sv">32h</div><div class="sl" data-k="totalHrs">Total hrs</div></div>
-      <div class="sbox"><div class="sv">1</div><div class="sl" data-k="dayOff">Day off</div></div>
+      <div class="sbox"><div class="sv" id="stat-on">0</div><div class="sl" data-k="onToday">On today</div></div>
+      <div class="sbox"><div class="sv" id="stat-hrs">0h</div><div class="sl" data-k="totalHrs">Total hrs</div></div>
+      <div class="sbox"><div class="sv" id="stat-off">0</div><div class="sl" data-k="dayOff">Day off</div></div>
     </div>
     <div class="sec-t" data-k="todayShifts">Today's shifts</div>
-    <div class="card row"><div class="av av0">HL</div><div class="f1"><div class="nm">Hai Linh Tran</div><div class="sub">9:00 AM — 5:00 PM · 8h</div><div class="hint" data-k="beautician">Beautician</div></div><span class="pill p-on" data-k="onShift">On shift</span></div>
-    <div class="card row"><div class="av av1">XW</div><div class="f1"><div class="nm">Xiao Wei</div><div class="sub">10:00 AM — 6:00 PM · 8h</div><div class="hint" data-k="beautician">Beautician</div></div><span class="pill p-on" data-k="onShift">On shift</span></div>
-    <div class="card row"><div class="av av2">MK</div><div class="f1"><div class="nm">Min Jung Ko</div><div class="sub">12:00 PM — 8:00 PM · 8h</div><div class="hint" data-k="beautician">Beautician</div></div><span class="pill p-on" data-k="onShift">On shift</span></div>
-    <div class="card row"><div class="av av3">SY</div><div class="f1"><div class="nm">Su Ying Chen</div><div class="sub" data-k="dayOffReq">Day off requested</div><div class="hint" data-k="beautician">Beautician</div></div><span class="pill p-off" data-k="dayOffLabel">Day off</span></div>
+    <div id="scheduleStaffList"></div>
     <div class="sec-t" style="margin-top:13px;" data-k="leaveReq">Leave Requests</div>
     <div class="req-card" id="leaveCard1">
       <div class="row"><div class="f1"><div class="nm">Su Ying Chen</div><div class="sub" data-k="annualLeave">Annual leave · 3 days · Apr 14–16</div></div><span class="pill p-warn" data-k="pending">Pending</span></div>
@@ -523,6 +570,24 @@ html,body{height:100%;overflow:hidden;font-family:-apple-system,BlinkMacSystemFo
   </div>
 </div>
 
+
+<!-- ═══ SETTINGS ═══ -->
+<div id="pg-settings" class="page">
+  <div class="sec">
+    <div class="owner-b">⚙️ <span>Jenny — Staff Management</span></div>
+
+    <div class="settings-section">
+      <div class="settings-hdr">Team members</div>
+      <div id="staffEditList"></div>
+      <div class="add-staff-card" onclick="addNewStaff()">
+        <div style="font-size:20px;margin-bottom:4px;">+</div>
+        <div style="font-size:13px;font-weight:600;color:var(--sage);">Add new beautician</div>
+      </div>
+    </div>
+
+    <button class="save-settings-btn" onclick="saveAllSettings()">✓ Save all changes</button>
+  </div>
+</div>
 </div><!-- end content -->
 
 <!-- BOTTOM NAV -->
@@ -534,6 +599,7 @@ html,body{height:100%;overflow:hidden;font-family:-apple-system,BlinkMacSystemFo
   <button class="bn" onclick="showPage('time',this)"><span class="bn-ico">⏱</span><span class="bn-lbl" data-k="navTime">Time</span></button>
   <button class="bn" onclick="showPage('inventory',this)"><span class="bn-ico">📦</span><span class="bn-lbl" data-k="navInventory">Stock</span></button>
   <button class="bn" onclick="showPage('clients',this)"><span class="bn-ico">💬</span><span class="bn-lbl" data-k="navClients">Clients</span></button>
+  <button class="bn" onclick="showPage('settings',this)"><span class="bn-ico">⚙️</span><span class="bn-lbl">Settings</span></button>
 </nav>
 
 <div class="toast" id="toast"></div>
@@ -556,6 +622,42 @@ html,body{height:100%;overflow:hidden;font-family:-apple-system,BlinkMacSystemFo
 
 <div class="overlay" id="invDetailOv"><div class="ov-hdr"><button class="back-btn" onclick="closeOv('invDetailOv')">← Back</button><div class="ov-t" id="invDetailTitle">Item Detail</div></div><div class="ov-body" id="invDetailBody"></div></div>
 
+
+<!-- PIN LOGIN SCREEN -->
+<div class="pin-screen" id="pinScreen">
+  <div class="pin-logo">SHURA<span>.</span></div>
+  <div class="pin-subtitle">Staff Portal</div>
+
+  <div class="pin-user-select">
+    <div class="pin-user-lbl">Who are you?</div>
+    <div class="pin-users" id="pinUserList"></div>
+  </div>
+
+  <div class="pin-dots" id="pinDots">
+    <div class="pin-dot" id="d0"></div>
+    <div class="pin-dot" id="d1"></div>
+    <div class="pin-dot" id="d2"></div>
+    <div class="pin-dot" id="d3"></div>
+  </div>
+
+  <div class="pin-pad">
+    <button class="pin-key" onclick="pinKey('1')">1</button>
+    <button class="pin-key" onclick="pinKey('2')">2</button>
+    <button class="pin-key" onclick="pinKey('3')">3</button>
+    <button class="pin-key" onclick="pinKey('4')">4</button>
+    <button class="pin-key" onclick="pinKey('5')">5</button>
+    <button class="pin-key" onclick="pinKey('6')">6</button>
+    <button class="pin-key" onclick="pinKey('7')">7</button>
+    <button class="pin-key" onclick="pinKey('8')">8</button>
+    <button class="pin-key" onclick="pinKey('9')">9</button>
+    <button class="pin-key empty"></button>
+    <button class="pin-key" onclick="pinKey('0')">0</button>
+    <button class="pin-key del" onclick="pinDel()">⌫</button>
+  </div>
+
+  <div class="pin-error" id="pinError">Incorrect PIN. Please try again.</div>
+  <div class="pin-welcome" id="pinWelcome"></div>
+</div>
 </div><!-- end shell -->
 
 <script>
@@ -625,6 +727,7 @@ function showPage(name,el){
   if(pg)pg.classList.add('active');
   el.classList.add('active');
   document.querySelector('.content').scrollTop=0;
+  if(name==='schedule'){renderSchedule();}
   if(name==='team'){renderBirthdays();renderEvents();}
   if(name==='time'){renderWageCalc();}
   if(name==='inventory'){renderInv();updateInvSum();renderCon();}
@@ -635,6 +738,7 @@ function setLoc(loc,el){
   document.querySelectorAll('.locbtn').forEach(function(b){b.classList.remove('active');});
   el.classList.add('active');
   renderInv();updateInvSum();
+  renderSchedule();
 }
 
 function selDay(el){
@@ -1128,11 +1232,64 @@ function applyLang(){
   });
 }
 
+
+// ═══════════════════════════════════════════
+// SCHEDULE RENDERING BY LOCATION
+// ═══════════════════════════════════════════
+function renderSchedule() {
+  var list = document.getElementById('scheduleStaffList');
+  if (!list) return;
+  
+  // Filter staff by current location
+  var locStaff = staffList.filter(function(s) {
+    return s.locs && s.locs.indexOf(currentLoc) > -1;
+  });
+  
+  if (locStaff.length === 0) {
+    list.innerHTML = '<div class="card" style="text-align:center;color:var(--text3);font-size:12px;padding:16px;">No staff assigned to ' + currentLoc + '</div>';
+    updateScheduleStats(0, 0, 0);
+    return;
+  }
+  
+  list.innerHTML = locStaff.map(function(s, i) {
+    // Alternate between on shift and day off for demo
+    var isOff = i === locStaff.length - 1 && locStaff.length > 1;
+    var times = ['9:00 AM — 5:00 PM · 8h', '10:00 AM — 6:00 PM · 8h', '12:00 PM — 8:00 PM · 8h', '9:00 AM — 3:00 PM · 6h'];
+    var timeStr = isOff ? '<span data-k="dayOffReq">Day off requested</span>' : times[i % times.length];
+    var pillHtml = isOff
+      ? '<span class="pill p-off" data-k="dayOffLabel">Day off</span>'
+      : '<span class="pill p-on" data-k="onShift">On shift</span>';
+    var avStyle = avStyles[s.av] || avStyles['av0'];
+    return '<div class="card row">' +
+      '<div class="av" style="' + avStyle + '">' + s.init + '</div>' +
+      '<div class="f1"><div class="nm">' + s.name + '</div>' +
+      '<div class="sub">' + (isOff ? 'Day off requested' : times[i % times.length]) + '</div>' +
+      '<div class="hint">' + (s.role || 'Beautician') + '</div></div>' +
+      pillHtml +
+      '</div>';
+  }).join('');
+  
+  var onCount = locStaff.filter(function(s,i){ return !(i === locStaff.length-1 && locStaff.length > 1); }).length;
+  var offCount = locStaff.length - onCount;
+  updateScheduleStats(onCount, onCount * 8, offCount);
+  applyLang();
+}
+
+function updateScheduleStats(on, hrs, off) {
+  var a = document.getElementById('stat-on');
+  var b = document.getElementById('stat-hrs');
+  var c = document.getElementById('stat-off');
+  if(a) a.textContent = on;
+  if(b) b.textContent = hrs + 'h';
+  if(c) c.textContent = off;
+}
+
 // ═══════════════════════════════════════════
 // INIT
 // ═══════════════════════════════════════════
 document.addEventListener('DOMContentLoaded',function(){
   buildWeekStrip();
+  renderSchedule();
   renderInv();updateInvSum();renderCon();
   renderBirthdays();renderEvents();
   renderWageCalc();
@@ -1142,7 +1299,417 @@ document.addEventListener('DOMContentLoaded',function(){
   var sd=document.getElementById('shiftDate');if(sd)sd.value=today;
   var ed=document.getElementById('eventDate');if(ed)ed.value=today;
   var bd=document.getElementById('bdayDate');if(bd)bd.value=today;
+  // Show PIN login screen
+  buildPinScreen();
 });
+
+// ═══════════════════════════════════════════
+// STAFF MANAGEMENT
+// ═══════════════════════════════════════════
+var staffList = [
+  {id:1, name:'Hai Linh Tran', init:'HL', av:'av0', role:'Nail Technician', locs:['Glebe'], rate:30, hours:38, bday:'04-15'},
+  {id:2, name:'Xiao Wei', init:'XW', av:'av1', role:'Lash Artist', locs:['Glebe'], rate:28, hours:34, bday:'05-03'},
+  {id:3, name:'Min Jung Ko', init:'MK', av:'av2', role:'Beauty Therapist', locs:['Surry Hills'], rate:28, hours:30, bday:'06-22'},
+  {id:4, name:'Su Ying Chen', init:'SY', av:'av3', role:'Beautician', locs:['Ultimo'], rate:25.5, hours:28, bday:'08-10'},
+];
+
+var avColors = ['av0','av1','av2','av3',
+  'av-c4','av-c5','av-c6','av-c7'];
+
+var avStyles = {
+  'av0':'background:#EAF4EE;color:#2d5c3f;',
+  'av1':'background:#E1F5EE;color:#0F6E56;',
+  'av2':'background:#EEEDFE;color:#3C3489;',
+  'av3':'background:#FAEEDA;color:#854F0B;',
+  'av-c4':'background:#E6F1FB;color:#185FA5;',
+  'av-c5':'background:#FCEBEB;color:#A32D2D;',
+  'av-c6':'background:#FFF8E6;color:#854F0B;',
+  'av-c7':'background:#F1EFE8;color:#5F5E5A;',
+};
+
+var allLocs = ['Glebe','Surry Hills','Ultimo'];
+
+function getInitials(name) {
+  var parts = name.trim().split(' ');
+  if (parts.length >= 2) return (parts[0][0] + parts[parts.length-1][0]).toUpperCase();
+  return name.substring(0,2).toUpperCase();
+}
+
+function renderStaffSettings() {
+  var list = document.getElementById('staffEditList');
+  if (!list) return;
+  list.innerHTML = staffList.map(function(s) {
+    var avOpts = Object.keys(avStyles).map(function(av) {
+      return '<div class="staff-av-pick' + (s.av===av?' selected':'') + '" style="' + avStyles[av] + '" onclick="changeAv(' + s.id + ','' + av + '')">' + (s.init||'?') + '</div>';
+    }).join('');
+
+    var locBtns = allLocs.map(function(loc) {
+      var active = s.locs && s.locs.indexOf(loc) > -1;
+      return '<button class="loc-toggle-btn' + (active?' active':'') + '" onclick="toggleLoc(' + s.id + ','' + loc + '')">' + loc + '</button>';
+    }).join('');
+
+    var bdayVal = s.bday ? ('2025-' + s.bday) : '';
+
+    return '<div class="staff-edit-card" id="secard-' + s.id + '">' +
+      '<div class="staff-edit-top">' +
+        '<div class="staff-av-pick selected" id="av-' + s.id + '" style="' + (avStyles[s.av]||avStyles['av0']) + '">' + (s.init||'??') + '</div>' +
+        '<div class="f1"><div style="font-size:13px;font-weight:600;color:var(--text);">' + s.name + '</div>' +
+        '<div style="font-size:11px;color:var(--text3);margin-top:2px;">' + (s.role||'Beautician') + '</div></div>' +
+        '<button class="del-staff-btn" onclick="deleteStaff(' + s.id + ')">Remove</button>' +
+      '</div>' +
+      '<div class="av-picker" id="avpicker-' + s.id + '" style="display:none;">' + avOpts + '</div>' +
+      '<div class="staff-fields">' +
+        '<div class="staff-field"><div class="staff-field-lbl">Full name</div><input type="text" value="' + s.name + '" id="sf-name-' + s.id + '" oninput="updateStaffField(' + s.id + ','name',this.value)"></div>' +
+        '<div class="staff-field"><div class="staff-field-lbl">Role / Title</div><input type="text" value="' + (s.role||'Beautician') + '" id="sf-role-' + s.id + '" oninput="updateStaffField(' + s.id + ','role',this.value)"></div>' +
+        '<div class="staff-field"><div class="staff-field-lbl">Hourly rate ($)</div><input type="number" value="' + s.rate + '" step="0.5" min="0" id="sf-rate-' + s.id + '" oninput="updateStaffField(' + s.id + ','rate',parseFloat(this.value)||0)"></div>' +
+        '<div class="staff-field"><div class="staff-field-lbl">Avg hours/week</div><input type="number" value="' + s.hours + '" step="0.5" min="0" id="sf-hours-' + s.id + '" oninput="updateStaffField(' + s.id + ','hours',parseFloat(this.value)||0)"></div>' +
+      '</div>' +
+      '<div class="staff-field-full"><div class="staff-field-lbl">Birthday (optional)</div><input type="date" value="' + bdayVal + '" id="sf-bday-' + s.id + '" oninput="updateBday(' + s.id + ',this.value)"></div>' +
+      '<div class="staff-field-full"><div class="staff-field-lbl">Location(s)</div><div class="loc-toggle" id="loctoggle-' + s.id + '">' + locBtns + '</div></div>' +
+    '</div>';
+  }).join('');
+}
+
+function updateStaffField(id, field, val) {
+  var s = staffList.find(function(x){return x.id===id;});
+  if (!s) return;
+  s[field] = val;
+  if (field === 'name') {
+    s.init = getInitials(val);
+    var avEl = document.getElementById('av-' + id);
+    if (avEl) avEl.textContent = s.init;
+    // update picker initials
+    var picker = document.getElementById('avpicker-' + id);
+    if (picker) {
+      var picks = picker.querySelectorAll('.staff-av-pick');
+      picks.forEach(function(p){p.textContent = s.init;});
+    }
+  }
+}
+
+function updateBday(id, val) {
+  var s = staffList.find(function(x){return x.id===id;});
+  if (!s || !val) return;
+  var d = new Date(val);
+  s.bday = String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+}
+
+function changeAv(id, av) {
+  var s = staffList.find(function(x){return x.id===id;});
+  if (!s) return;
+  s.av = av;
+  var avEl = document.getElementById('av-' + id);
+  if (avEl) { avEl.style.cssText = avStyles[av]; avEl.textContent = s.init; }
+  var picker = document.getElementById('avpicker-' + id);
+  if (picker) {
+    picker.querySelectorAll('.staff-av-pick').forEach(function(p){p.classList.remove('selected');});
+    var picks = picker.querySelectorAll('.staff-av-pick');
+    Object.keys(avStyles).forEach(function(a,i){if(a===av && picks[i])picks[i].classList.add('selected');});
+  }
+}
+
+function toggleLoc(id, loc) {
+  var s = staffList.find(function(x){return x.id===id;});
+  if (!s) return;
+  if (!s.locs) s.locs = [];
+  var idx = s.locs.indexOf(loc);
+  if (idx > -1) { if(s.locs.length > 1) s.locs.splice(idx,1); }
+  else { s.locs.push(loc); }
+  var container = document.getElementById('loctoggle-' + id);
+  if (container) {
+    container.querySelectorAll('.loc-toggle-btn').forEach(function(btn){
+      btn.classList.toggle('active', s.locs.indexOf(btn.textContent) > -1);
+    });
+  }
+}
+
+function deleteStaff(id) {
+  if (!confirm('Remove this beautician?')) return;
+  staffList = staffList.filter(function(s){return s.id!==id;});
+  renderStaffSettings();
+  showToast('Beautician removed');
+}
+
+function addNewStaff() {
+  var newId = Date.now();
+  staffList.push({
+    id: newId,
+    name: 'New Beautician',
+    init: 'NB',
+    av: 'av0',
+    role: 'Beautician',
+    locs: ['Glebe'],
+    rate: 25,
+    hours: 30,
+    bday: ''
+  });
+  renderStaffSettings();
+  // scroll to new card
+  var card = document.getElementById('secard-' + newId);
+  if (card) card.scrollIntoView({behavior:'smooth'});
+  showToast('New beautician added — fill in their details!');
+}
+
+function saveAllSettings() {
+  // sync staffWages from staffList
+  staffWages = staffList.map(function(s){
+    return {name:s.name, init:s.init, av:s.av, rate:s.rate||0, hours:s.hours||0};
+  });
+  // sync birthdays
+  birthdays = staffList.filter(function(s){return s.bday;}).map(function(s){
+    return {id:s.id, name:s.name, date:s.bday, av:s.av, init:s.init};
+  });
+  // update schedule cards
+  syncScheduleCards();
+  // re-render schedule with updated staff
+  renderSchedule();
+  showToast('✓ All changes saved!');
+}
+
+function syncScheduleCards() {
+  // Update shift cards with current staff names
+  var shiftBeau = document.getElementById('shiftBeau');
+  if (shiftBeau) {
+    shiftBeau.innerHTML = staffList.map(function(s){
+      return '<option>' + s.name + '</option>';
+    }).join('');
+  }
+  var bdaySelect = document.getElementById('bdayName');
+  if (bdaySelect) {
+    bdaySelect.innerHTML = staffList.map(function(s){
+      return '<option>' + s.name + '</option>';
+    }).join('');
+  }
+}
+
+// Patch showPage for settings
+var _origShowPageBase = showPage;
+showPage = function(name, el) {
+  _origShowPageBase(name, el);
+  if (name === 'settings') { renderStaffSettings(); }
+};
+
+
+// ═══════════════════════════════════════════
+// PIN LOGIN SYSTEM
+// ═══════════════════════════════════════════
+var currentUser = null; // {name, role, isJenny, pin}
+var pinEntry = '';
+var pinSelectedUser = null;
+
+// Jenny's PIN and staff PINs
+// Jenny PIN: 0000 (change in Settings)
+var jennyPin = '0000';
+
+// Each staff member gets a PIN stored in their profile
+// Default PINs assigned by position — Jenny sets them in Settings
+var defaultPins = ['1111','2222','3333','4444','5555','6666','7777','8888'];
+
+function initPins() {
+  // Assign default PINs to staff who don't have one
+  staffList.forEach(function(s, i) {
+    if (!s.pin) s.pin = defaultPins[i] || '1234';
+  });
+}
+
+function buildPinScreen() {
+  initPins();
+  var list = document.getElementById('pinUserList');
+  if (!list) return;
+
+  // Jenny button first
+  var html = '<button class="pin-user-btn" id="puser-jenny" onclick="selectPinUser('jenny')">Jenny</button>';
+
+  // Staff buttons
+  staffList.forEach(function(s) {
+    html += '<button class="pin-user-btn" id="puser-' + s.id + '" onclick="selectPinUser(' + s.id + ')">' + s.name.split(' ')[0] + '</button>';
+  });
+
+  list.innerHTML = html;
+}
+
+function selectPinUser(userId) {
+  pinSelectedUser = userId;
+  pinEntry = '';
+  updatePinDots();
+
+  // Update UI
+  document.querySelectorAll('.pin-user-btn').forEach(function(b) { b.classList.remove('selected'); });
+  var btn = document.getElementById('puser-' + userId);
+  if (btn) btn.classList.add('selected');
+
+  document.getElementById('pinError').classList.remove('show');
+  document.getElementById('pinWelcome').textContent = '';
+}
+
+function pinKey(k) {
+  if (!pinSelectedUser) { showPinError('Please select who you are first!'); return; }
+  if (pinEntry.length >= 4) return;
+  pinEntry += k;
+  updatePinDots();
+  if (pinEntry.length === 4) {
+    setTimeout(checkPin, 150);
+  }
+}
+
+function pinDel() {
+  pinEntry = pinEntry.slice(0, -1);
+  updatePinDots();
+  document.getElementById('pinError').classList.remove('show');
+}
+
+function updatePinDots() {
+  for (var i = 0; i < 4; i++) {
+    var dot = document.getElementById('d' + i);
+    if (dot) dot.classList.toggle('filled', i < pinEntry.length);
+  }
+}
+
+function checkPin() {
+  var correctPin = '';
+  var userName = '';
+  var isJenny = false;
+
+  if (pinSelectedUser === 'jenny') {
+    correctPin = jennyPin;
+    userName = 'Jenny';
+    isJenny = true;
+  } else {
+    var staff = staffList.find(function(s) { return s.id === pinSelectedUser; });
+    if (staff) {
+      correctPin = staff.pin;
+      userName = staff.name.split(' ')[0];
+    }
+  }
+
+  if (pinEntry === correctPin) {
+    // SUCCESS
+    currentUser = { name: userName, isJenny: isJenny, id: pinSelectedUser };
+    document.getElementById('pinWelcome').textContent = 'Welcome, ' + userName + '! 👋';
+
+    setTimeout(function() {
+      // Hide PIN screen
+      document.getElementById('pinScreen').style.display = 'none';
+      // Update top badge
+      var badge = document.getElementById('topUserBadge');
+      if (badge) badge.textContent = userName;
+      // Apply user-specific view
+      applyUserView();
+      showToast('Welcome back, ' + userName + '! 👋');
+    }, 600);
+  } else {
+    // WRONG PIN
+    showPinError('Incorrect PIN. Please try again.');
+    pinEntry = '';
+    updatePinDots();
+  }
+}
+
+function showPinError(msg) {
+  var el = document.getElementById('pinError');
+  if (el) { el.textContent = msg; el.classList.add('show'); }
+  // Shake dots
+  var dots = document.getElementById('pinDots');
+  if (dots) {
+    dots.style.transform = 'translateX(-8px)';
+    setTimeout(function(){ dots.style.transform = 'translateX(8px)'; }, 80);
+    setTimeout(function(){ dots.style.transform = 'translateX(-5px)'; }, 160);
+    setTimeout(function(){ dots.style.transform = 'translateX(0)'; }, 240);
+  }
+}
+
+function applyUserView() {
+  if (!currentUser) return;
+  if (currentUser.isJenny) {
+    // Jenny sees everything — no restrictions
+    // Show wages nav
+    document.querySelectorAll('.bn').forEach(function(b){ b.style.display = ''; });
+  } else {
+    // Staff: hide wages nav button
+    var navBtns = document.querySelectorAll('.bn');
+    navBtns.forEach(function(b){
+      var lbl = b.querySelector('.bn-lbl');
+      if (lbl && (lbl.getAttribute('data-k') === 'navWages' || b.querySelector('.bn-ico') && b.querySelector('.bn-ico').textContent === '⚙️')) {
+        b.style.display = 'none';
+      }
+    });
+    // Filter schedule to staff's location
+    if (currentUser.id !== 'jenny') {
+      var staff = staffList.find(function(s){ return s.id === currentUser.id; });
+      if (staff && staff.locs && staff.locs.length > 0) {
+        // Set location to staff's primary location
+        var primaryLoc = staff.locs[0];
+        var locBtns = document.querySelectorAll('.locbtn');
+        locBtns.forEach(function(b){
+          if (b.textContent === primaryLoc) {
+            b.classList.add('active');
+            currentLoc = primaryLoc;
+          } else {
+            b.classList.remove('active');
+          }
+        });
+        renderSchedule();
+        renderInv(); updateInvSum();
+      }
+    }
+  }
+}
+
+function doLogout() {
+  currentUser = null;
+  pinEntry = '';
+  pinSelectedUser = null;
+  updatePinDots();
+  document.querySelectorAll('.pin-user-btn').forEach(function(b){ b.classList.remove('selected'); });
+  document.getElementById('pinError').classList.remove('show');
+  document.getElementById('pinWelcome').textContent = '';
+  document.getElementById('pinScreen').style.display = 'flex';
+  // restore all nav items
+  document.querySelectorAll('.bn').forEach(function(b){ b.style.display = ''; });
+}
+
+// Add PIN field to Settings staff cards
+var _origRenderStaffSettings = renderStaffSettings;
+renderStaffSettings = function() {
+  _origRenderStaffSettings();
+  // Add PIN field to each staff card
+  staffList.forEach(function(s) {
+    var card = document.getElementById('secard-' + s.id);
+    if (!card) return;
+    // Check if PIN field already exists
+    if (card.querySelector('.pin-field')) return;
+    var pinDiv = document.createElement('div');
+    pinDiv.className = 'staff-field-full pin-field';
+    pinDiv.innerHTML = '<div class="staff-field-lbl">🔐 PIN (4 digits)</div>' +
+      '<input type="password" maxlength="4" placeholder="e.g. 1234" value="' + (s.pin||'') + '" ' +
+      'oninput="updateStaffPin(' + s.id + ',this.value)" ' +
+      'style="width:100%;background:none;border:none;font-size:16px;font-weight:600;color:var(--text);font-family:inherit;padding:0;letter-spacing:4px;">';
+    card.appendChild(pinDiv);
+  });
+
+  // Add Jenny PIN section at top
+  var list = document.getElementById('staffEditList');
+  if (list && !document.getElementById('jennyPinCard')) {
+    var jennyCard = document.createElement('div');
+    jennyCard.id = 'jennyPinCard';
+    jennyCard.className = 'staff-edit-card';
+    jennyCard.style.background = 'var(--sage-light)';
+    jennyCard.style.borderColor = 'var(--sage-mid)';
+    jennyCard.innerHTML = '<div class="staff-edit-top"><div class="av" style="background:#B8DDCA;color:var(--sage-dark);width:38px;height:38px;font-size:13px;font-weight:600;flex-shrink:0;">JY</div>' +
+      '<div class="f1"><div class="nm">Jenny (Owner)</div><div style="font-size:11px;color:var(--text3);margin-top:2px;">Full access</div></div></div>' +
+      '<div class="staff-field-full"><div class="staff-field-lbl">🔐 Jenny's PIN (4 digits)</div>' +
+      '<input type="password" maxlength="4" placeholder="e.g. 0000" value="' + jennyPin + '" ' +
+      'oninput="jennyPin=this.value" ' +
+      'style="width:100%;background:none;border:none;font-size:16px;font-weight:600;color:var(--text);font-family:inherit;padding:0;letter-spacing:4px;"></div>';
+    list.insertBefore(jennyCard, list.firstChild);
+  }
+};
+
+function updateStaffPin(id, val) {
+  var s = staffList.find(function(x){ return x.id === id; });
+  if (s) s.pin = val;
+}
+
 </script>
 </body>
 </html>
