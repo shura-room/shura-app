@@ -1264,8 +1264,6 @@ document.addEventListener('DOMContentLoaded',function(){
   var sd=document.getElementById('shiftDate');if(sd)sd.value=today;
   var ed=document.getElementById('eventDate');if(ed)ed.value=today;
   var bd=document.getElementById('bdayDate');if(bd)bd.value=today;
-  // Show PIN login screen
-  buildPinScreen();
 });
 
 // ═══════════════════════════════════════════
@@ -1708,6 +1706,8 @@ renderStaffSettings = function() {
   setTimeout(addPinFieldsToSettings, 50);
 };
 
+// Init PIN screen after all data is loaded
+buildPinScreen();
 </script>
 
 <!-- PIN LOGIN SCREEN -->
